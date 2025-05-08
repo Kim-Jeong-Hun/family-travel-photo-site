@@ -3,16 +3,15 @@
 import React, { useState, useEffect } from "react";
 import "@/app/styles/IntroAnimation.css"; // CSS 파일 추가
 
-function IntroAnimation() {
+export default function IntroAnimation() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % 3); // 0, 1, 2 반복
     }, 2000); // 1초 Fade-in + 1초 Fade-out
-    //useEffect : 첫 번째 이미지가 렌더링 된 이후 다음 이미지로 index 변경
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // 컴포넌트 언마운트 시 타이머 정리
   }, []);
 
   const images = [
@@ -31,10 +30,8 @@ function IntroAnimation() {
             alt={`icon-${index}`}
             className={`svg-image ${currentIndex === index ? "visible" : ""}`}
           />
-      ))}
+        ))}
       </div>
     </div>
   );
 }
-
-export default IntroAnimation;
