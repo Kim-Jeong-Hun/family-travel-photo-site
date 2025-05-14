@@ -1,5 +1,5 @@
 'use client';
-import MainUpperPart from "./components/MainUpperPart";
+import MainUpperPart from "../components/MainUpperPart";
 
 export default function Map() {
   return (
