@@ -5,7 +5,7 @@ import Title from './Title';
 function MainUpperPart(props) {
     return (
         <nav className="flex flex-row items-center w-full h-full">
-            <div className="">
+            <div>
                 <HamburgerButton />
             </div>
             <div>
