@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import IntroAnimation from './components/IntroAnimation';
-import "./styles/PageStyles.css";
+import LoginForm from './login/LoginForm';
 
 export default function Home() {
 
@@ -19,11 +19,6 @@ export default function Home() {
   if (showIntroAnimation) return <IntroAnimation />;
 
   return (
-    <main className="page-container">
-      <h3>
-        <p><u><b>여기담다</b></u></p>
-        <p>우리 가족의 이야기가 시작되는 곳</p>
-      </h3>
-    </main>
+    <LoginForm />
   );
 }

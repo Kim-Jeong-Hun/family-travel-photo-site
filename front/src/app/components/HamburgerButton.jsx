@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+import "@/app/styles/HamburgerButton.css"
 
-const HamburgerButton = ({ onTouch }) => {
-    return(
-        <button 
-            onTouch={onTouch}
-            onClick={onTouch}
-            className="flex flex-col justify-between w-8 h-6 p-1"
-            aria-label="프로필 메뉴">
-            <span className="block w-full h-1 bg-black rounded"></span>
-            <span className="block w-full h-1 bg-black rounded"></span>
-            <span className="block w-full h-1 bg-black rounded"></span>
-        </button>
+export default function HamburgerButton() {
+    const [isActive, setIsActive] = useState(false);
+
+    return (
+        <div
+            className={`hamburger ${isActive ? "is-active" : ""}`}
+            onClick={() => setIsActive(!isActive)}>
+            <div className="hamburger_container">
+                <div className="hamburger_inner"></div>
+                <div className="hamburger_hidden"></div>
+            </div>
+        </div>
     );
 }
-
-export default HamburgerButton;

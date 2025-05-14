@@ -1,7 +1,10 @@
 module.exports = {
     content: [
-      "./src/**/*.{js,jsx,ts,tsx,css}",
-      "./src/app/**/*.{js,jsx,ts,tsx,css}",
+      "./**/*.{js,jsx,ts,tsx,css}",
+      "./app/**/*.{js,jsx,ts,tsx,css}",
+      "./components/**/*.{js,jsx,ts,tsx,css}",
+      "./login/**/*.{js,jsx,ts,tsx,css}"
+      
     ],
     theme: {
       extend: {},

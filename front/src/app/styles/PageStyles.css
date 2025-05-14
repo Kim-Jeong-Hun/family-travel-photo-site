@@ -1,7 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.page-container {
-  @apply flex justify-center items-center w-full h-screen; /* 화면 전체를 차지하고 정가운데 정렬 */
-}
