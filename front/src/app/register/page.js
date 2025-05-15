@@ -1,10 +1,11 @@
+"use client";
+
 import React from 'react';
+import RegisterForm from '../components/login_and_register_form/RegisterForm';
 
 export default function Register() {
 
     return(
-        <div>
-            회원가입 페이지
-        </div>
+        <RegisterForm />
     );
 }

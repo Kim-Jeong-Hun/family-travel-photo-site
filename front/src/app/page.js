@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import IntroAnimation from './components/IntroAnimation';
-import LoginForm from './login/LoginForm';
+import LoginForm from './components/login_and_register_form/LoginForm';
 
 export default function Home() {
 
