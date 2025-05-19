@@ -3,7 +3,7 @@ import React from 'react';
 
 function Title() {
     return (
-        <p className="flex justify-center items-center mx-auto text-xl font-bold text-center text-grow">여기담다</p>
+        <p className="text-[20px] font-[700] text-center">여기담다</p>
     )
 }
 

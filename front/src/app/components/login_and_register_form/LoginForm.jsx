@@ -1,11 +1,19 @@
 "use client";
+import React from "react";
+import { useRouter } from "next/navigation";
 
 function LoginForm() {
+  const router = useRouter();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    router.push("/main");
+  }
+
+
   return (
-    <div className="bg-white opacity-80 z-[10]">
-      <div className="h-screen w-full bg-[url('/images/login-bg.jpg')] bg-cover bg-center flex items-center justify-center">
+      <div className="h-screen w-full bg-[url('/images/login-bg.jpg')] bg-cover bg-center opacity-80 flex items-center justify-center">
         <div className="p-8 mb-[5%] w-[75%] max-w-sm h-[80%] text-center">
-          <div className="">
+          <div>
             <img
               src="/images/login-logo.png"
               alt="여기담다"
@@ -14,7 +22,7 @@ function LoginForm() {
           </div>
 
           <div className="flex flex-col gap-4 mt-[25%] items-center justify-center">
-            <form name="loginform" method="get" action="">
+            <form name="loginform" onSubmit={handleSubmit}>
               <input
                 type="email"
                 placeholder="아이디"
@@ -43,7 +51,6 @@ function LoginForm() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
