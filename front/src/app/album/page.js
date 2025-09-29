@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Album() {
+function Album_page() {
     return (
         <div>
             앨범 페이지
@@ -8,4 +8,4 @@ function Album() {
     );
 }
 
-export default Album;
+export default Album_page;

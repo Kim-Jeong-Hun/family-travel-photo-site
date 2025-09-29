@@ -31,8 +31,8 @@ function RegisterForm1() {
                   className={`w-[140px] h-[40px] flex items-center justify-center cursor-pointer 
                     ${
                       selectedGender === "male"
-                        ? "blue-500 text-white shadow-lg shadow-blue-300"
-                        : "bg-gray-100 text-gray-700 hover:bg-blue-100"
+                        ? "!bg-blue-500 !text-white !shadow-lg !shadow-blue-300"
+                        : "!bg-gray-100 !text-gray-700 !hover:bg-blue-100"
                     }`}
                 >
                   <input
@@ -41,7 +41,8 @@ function RegisterForm1() {
                     id="male"
                     value="male"
                     className="hidden"
-                    onChange={() => setSelectedGender("male")}
+                    onChange={() => {setSelectedGender("male")}
+                  }
                     checked={selectedGender === "male"}
                   />
                   남성
@@ -51,8 +52,8 @@ function RegisterForm1() {
                   className={`w-[140px] h-[40px] flex items-center justify-center cursor-pointer 
                     ${
                       selectedGender === "female"
-                        ? "bg-blue-500 text-white shadow-lg shadow-blue-300"
-                        : "bg-gray-100 text-gray-700 hover:bg-blue-100"
+                        ? "!bg-blue-500 !text-white !shadow-lg !shadow-blue-300"
+                        : "!bg-gray-100 !text-gray-700 !hover:bg-blue-100"
                     }`}
                 >
                   <input

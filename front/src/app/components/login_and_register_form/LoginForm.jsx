@@ -1,12 +1,10 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
 
 function LoginForm() {
-  const router = useRouter();
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.push("/main");
+    window.location.href = "/main";
   }
 
 

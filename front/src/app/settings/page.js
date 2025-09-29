@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Settings() {
+function Settings_page() {
     return (
         <div>
             설정 페이지
@@ -8,4 +8,4 @@ function Settings() {
     );
 }
 
-export default Settings;
+export default Settings_page;

@@ -1,11 +1,11 @@
 import React from 'react';
 
-function Alert_page() {
+function Write_page() {
     return (
         <div>
-            알림 페이지
+            게시글 작성
         </div>
     );
 }
 
-export default Alert_page;
+export default Write_page;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function myPage() {
+function My_page() {
     return (
         <div>
             마이페이지
@@ -8,4 +8,4 @@ function myPage() {
     );
 }
 
-export default myPage;
+export default My_page;

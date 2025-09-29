@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "../styles/MobileMenu.css";
+import "../styles/Sidebar.css";
 
-const MobileMenu = () => {
+const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -60,4 +60,4 @@ const MobileMenu = () => {
   );
 };
 
-export default MobileMenu;
+export default Sidebar;
