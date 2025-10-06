@@ -18,9 +18,11 @@ export default function Main() {
         };
         const map = new window.kakao.maps.Map(container, options); // 지도 생성
         
-        //마커 변수
-        let marker = null;
-    
+        let marker = null; // 마커 변수
+
+        let mapTypeControl = new kakao.maps.MapTypeControl(); // 맵 종류 컨트롤 변수
+        let zoomControl = new kakao.maps.ZoomControl(); // 줌 컨트롤 변수
+
         // 지도 클릭 시 마커 생성 또는 위치 이동
         window.kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
           const latlng = mouseEvent.latLng;
@@ -33,11 +35,18 @@ export default function Main() {
             marker.setPosition(latlng);
           }
         });
+
+        // 지도 우상단에 맵 종류 컨트롤 추가, 우단에 줌 컨트롤 추가
+        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
       });
     };
 
     onLoadKakaoMap();
     console.log("kakao 지도 출력");
+
+
 
   }, []); // 의존성 배열이 비어 있으므로 최초 1회만 실행
 
