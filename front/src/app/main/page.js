@@ -9,6 +9,7 @@ export default function Main() {
       return;
     }
 
+    // 1. 카카오맵 API 가져와서 지도 생성
     const onLoadKakaoMap = () => { // 카카오맵을 로드하는 함수
       window.kakao.maps.load(() => { // 카카오맵 API가 로드되면 실행
         const container = document.getElementById("map"); // 지도를 표시할 DOM 요소 선택
@@ -17,37 +18,94 @@ export default function Main() {
           level: 13, // 지도 확대 레벨
         };
         const map = new window.kakao.maps.Map(container, options); // 지도 생성
-        
-        let marker = null; // 마커 변수
 
+        // 2. 지도에 컨트롤 요소 추가 위한 변수와 메소드
         let mapTypeControl = new kakao.maps.MapTypeControl(); // 맵 종류 컨트롤 변수
         let zoomControl = new kakao.maps.ZoomControl(); // 줌 컨트롤 변수
 
-        // 지도 클릭 시 마커 생성 또는 위치 이동
+        // 지도 우상단에 맵 종류 컨트롤 추가
+        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT); 
+
+        // 지도 오른쪽에 줌 컨트롤 추가
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+
+        // 3. 지도에 커스텀 오버레이 마커 생성
+        let marker = null; // 마커 변수
+        let overlay = null;
+
+        //동적 콘텐츠 예시 - 추후 수정
+        const createContent = (lat, lng) => `
+  <div class="w-72 text-left overflow-hidden font-sans text-sm leading-normal">
+    <div class="relative w-[220px] bg-white/100 rounded-lg shadow-lg border-b-2 border-r border-gray-300 overflow-hidden">
+      <div class="px-3 py-2 bg-gray-100/100 border-b border-gray-300">
+        <div class="flex justify-between items-center">
+          <span class="font-bold text-lg">선택한 위치</span>
+          <button onclick="closeOverlay()" class="w-4 h-4 hover:cursor-pointer" title="닫기">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 bg-white/100">
+        <div class="space-y-2 bg-white/100">
+          <div class="font-medium">위도: ${lat.toFixed(6)}</div>
+          <div class="font-medium">경도: ${lng.toFixed(6)}</div>
+          <button 
+            onclick="saveLocation(${lat}, ${lng})" 
+            class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          >
+            이 장소 저장하기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+
+        // 3.1. 지도 클릭 시 마커 생성 또는 위치 이동
+        // 3.2. 마커 생성 후 마커에 커스텀 오버레이 표시
         window.kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-          const latlng = mouseEvent.latLng;
+          const latlng = mouseEvent.latLng; //마우스 클릭한 곳의 좌표 저장
+          const content = createContent(latlng.getLat(), latlng.getLng());
+
           if (!marker) {
             marker = new window.kakao.maps.Marker({
               position: latlng,
               map: map,
             });
+
+            // 마커가 생성되면 오버레이도 생성
+            overlay = new window.kakao.maps.CustomOverlay({
+              content: content,
+              map: map,
+              position: marker.getPosition(),
+              xAnchor: 0.5,
+              yAnchor: 1.5
+            });
           } else {
             marker.setPosition(latlng);
+            if (overlay) {
+              overlay.setContent(content);
+              overlay.setPosition(latlng);
+            }
           }
-        });
+        });        
 
-        // 지도 우상단에 맵 종류 컨트롤 추가, 우단에 줌 컨트롤 추가
-        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+        window.saveLocation = function(lat, lng) {
+          console.log(`위치 저장 : 위도 ${lat}, 경도 ${lng}`);
+        };
 
+        // 오버레이 닫기 함수를 전역으로 설정
+        window.closeOverlay = function() {
+          overlay.setMap(null);
+        }
       });
     };
 
     onLoadKakaoMap();
     console.log("kakao 지도 출력");
-
-
-
   }, []); // 의존성 배열이 비어 있으므로 최초 1회만 실행
 
   return (
@@ -58,8 +116,8 @@ export default function Main() {
 }
 
 /*
-- 지도에 마커 생성 기능 추가
-- 카카오객체 유효성 체크 코드 제거
+- 지도 클릭 시 마커 + 오버레이 생성
+- 오버레이 초기 디자인 생성 (투명화 수정, 디자인 수정, 오버레이 내용 구현 필요)
 - 추후 useRef 훅 배워서 사용하기 위해 useRef 미리 import
 */
 
