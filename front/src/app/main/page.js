@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 export default function Main() {
   useEffect(() => {
+
     // 카카오맵 스크립트가 로드되지 않았다면 함수를 종료
     if (!window.kakao.maps) {
       return;
@@ -12,14 +13,14 @@ export default function Main() {
     // 1. 카카오맵 API 가져와서 지도 생성
     const onLoadKakaoMap = () => { // 카카오맵을 로드하는 함수
       window.kakao.maps.load(() => { // 카카오맵 API가 로드되면 실행
-        const container = document.getElementById("map"); // 지도를 표시할 DOM 요소 선택
-        const options = { // 지도 옵션 설정
+        const mapContainer = document.getElementById("map"); // 지도를 표시할 DOM 요소 선택
+        const mapOption = { // 지도 옵션 설정
           center: new window.kakao.maps.LatLng(36.34, 127.77), // 지도 중심 좌표
           level: 13, // 지도 확대 레벨
         };
-        const map = new window.kakao.maps.Map(container, options); // 지도 생성
+        const map = new window.kakao.maps.Map(mapContainer, mapOption); // 지도 생성
 
-        // 2. 지도에 컨트롤 요소 추가 위한 변수와 메소드
+        // 2. 지도에 맵 종류, 줌 컨트롤 기능 추가
         let mapTypeControl = new kakao.maps.MapTypeControl(); // 맵 종류 컨트롤 변수
         let zoomControl = new kakao.maps.ZoomControl(); // 줌 컨트롤 변수
 
@@ -30,11 +31,11 @@ export default function Main() {
         map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
 
-        // 3. 지도에 커스텀 오버레이 마커 생성
+        // 3. 지도에 커스텀 오버레이 마커 생성 기능
         let marker = null; // 마커 변수
         let overlay = null;
 
-        //동적 콘텐츠 예시 - 추후 수정
+        //동적 콘텐츠 생성 함수 예시 - 추후 수정
         const createContent = (lat, lng) => `
   <div class="w-72 text-left overflow-hidden font-sans text-sm leading-normal">
     <div class="relative w-[220px] bg-white/100 rounded-lg shadow-lg border-b-2 border-r border-gray-300 overflow-hidden">
@@ -101,6 +102,48 @@ export default function Main() {
         window.closeOverlay = function() {
           overlay.setMap(null);
         }
+        
+        /*
+        // 4. 장소 검색 객체 생성
+        let markers = []; // 마커 담을 배열
+        let ps = new kakao.maps.services.Places(); // 장소 검색 객체 생성
+        let infowindow = new kakao.maps.InfoWindow({zIndex:1}); // 목록 또는 마커 클릭 시 장소명 표출할 인포윈도우 생성
+        
+        function searchPlaces() {
+          let keyword = document.getElementById('keyword').value;
+          
+          // 문자열 양쪽 공백 제거 안될 시, 검색 불가능하게
+          if (!keyword.replace(/^\s+|\s+$/g, '')) { 
+            alert('키워드를 입력해주세요!');
+            return false;
+          }
+
+          // 장소 검색 객체를 통해 키워드로 장소 검색 요청
+          ps.keywordSearch(keyword, placesSearchCB);
+        }
+
+        // 장소검색이 완료됐을 때 호출되는 콜백함수
+        function placesSearchCB(data, status, pagination) {
+          // 정상 검색 시, 결과 없을 시, 오류 발생 시의 경우 모두 구현
+          if (status === kakao.maps.services.Status.OK) { 
+            displayPlaces(data); // 검색 목록, 마커 표출
+            displayPagination(pagination); // 페이지 번호 표출
+          } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+            alert('검색 결과가 존재하지 않습니다.');
+            return;
+          } else if (status === kakao.maps.services.Status.ERROR) {
+            alert('검색 결과 중 오류가 발생했습니다.');
+            return;
+          }
+        }
+
+        // 검색 결과 목록과 마커를 표시하는 함수
+        function displayPlaces(places) {
+          
+        }
+        */
+       
+
       });
     };
 
@@ -110,7 +153,10 @@ export default function Main() {
 
   return (
     <>
-      <div id="map" className="w-full h-full"></div> {/* 지도를 표시할 div */}
+      <div id="map" className="w-full h-full"> {/* 지도를 표시할 div */}
+        <div id="keyword">
+        </div>
+      </div> 
     </>
   );
 }

@@ -1,8 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Link from 'next/link'; //next.js의 Link 사용하여 SPA 방식으로 개선
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if(e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      setIsOpen(prev => !prev);
+      }
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+  };
+
+  window.addEventListener('keydown', handleGlobalKeyDown);
+
+  // 컴포넌트 언마운트 시 이벤트 리스너 제거
+  return () => {
+    window.removeEventListener('keydown', handleGlobalKeyDown);
+  }
+
+  }, [isOpen]);
 
   return (
     <div className="mobile_btn">
@@ -12,7 +33,11 @@ const Sidebar = () => {
         checked={isOpen}
         onChange={() => setIsOpen(!isOpen)}
       />
-      <label htmlFor="hamburger">
+      <label 
+        htmlFor="hamburger"
+        role="button"
+        aria-label={`메뉴 ${isOpen ? '닫기' : '열기'}`}
+      >
         <span></span>
         <span></span>
         <span></span>
@@ -20,16 +45,16 @@ const Sidebar = () => {
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <ul className="nav_mobile">
           <li>
-            <a href="/alert">알림</a>
+            <Link href="/alert">알림</Link>
           </li>
           <li>
-            <a href="/album">내 앨범</a>
+            <Link href="/album">내 앨범</Link>
           </li>
           <li>
-            <a href="/myPage">마이페이지</a>
+            <Link href="/myPage">마이페이지</Link>
           </li>
           <li>
-            <a href="/settings">설정</a>
+            <Link href="/settings">설정</Link>
           </li>
         </ul>
         <div className="sidebar_footer">
@@ -61,3 +86,11 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+
+/* 
+사이드바 만드는 법 :
+
+- useState의 상태 isOpen, setIsOpen 활용하여 className 동적으로 변경하여 css 변경 
+    (Sidebar.css에 스타일 정의됨)
+*/

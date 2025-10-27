@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from 'next/link';
 
 function RegisterForm1() {
     const [selectedGender, setSelectedGender] = useState(null);
@@ -96,9 +97,9 @@ function RegisterForm1() {
                 className="mb-[10px] mt-[40px] w-[280px] h-[45px] bg-[#ffe500] border-none rounded-[30px] text-[16px] font-bold text-black cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#ffdd00]"
               />
               <div>
-                <a href="/login" className="underline text-[#FFF]">
+                <Link href="/login" className="underline text-[#FFF]">
                   로그인하기
-                </a>
+                </Link>
               </div>
             </form>
           </div>

@@ -1,10 +1,17 @@
 "use client";
 import React from "react";
+import Link from 'next/link';
 
 function LoginForm() {
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    window.location.href = "/main";
+    try {
+      // ... 로그인 로직 ...
+      window.location.href = "/main"
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   }
 
 
@@ -32,13 +39,13 @@ function LoginForm() {
                 className="w-[280px] h-[40px] mb-[10px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
               />
               <div>
-                <a href="/register" className="underline text-[#FFF]">
+                <Link href="/register" className="underline text-[#FFF]">
                   회원가입
-                </a>
+                </Link>
                 <a className="text-[#FFF]"> / </a>
-                <a href="/find-password" className="underline text-[#FFF]">
+                <Link href="/find-password" className="underline text-[#FFF]">
                   비밀번호 찾기
-                </a>
+                </Link>
               </div>
               <input
                 type="submit"
