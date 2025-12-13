@@ -26,15 +26,16 @@ function RegisterForm1() {
                 className="w-[280px] h-[40px] my-[20px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
               />
               {/* 성별 선택 필드*/}
-              <div className="my-[20px] flex flex-row items-center justify-center bg-[#FFF] border border-[#ccc] rounded-full outline-none box-border">
+              <div className="my-[20px] flex flex-row items-center justify-center bg-[#FFF] border border-[#ccc] rounded-full outline-none box-border gap-2 overflow-hidden">
                 <label
                   htmlFor="male"
-                  className={`w-[140px] h-[40px] flex items-center justify-center cursor-pointer 
-                    ${
-                      selectedGender === "male"
-                        ? "!bg-blue-500 !text-white !shadow-lg !shadow-blue-300"
-                        : "!bg-gray-100 !text-gray-700 !hover:bg-blue-100"
-                    }`}
+                  className="w-[140px] h-[40px] flex items-center justify-center cursor-pointer rounded transition-all duration-300"
+                  // TailwindCSS는 정적 분석 도구이기 때문에 동적으로 처리해야 하는 부분은 style 속성으로 처리
+                  style={{
+                    backgroundColor: selectedGender === "male" ? "#3b82f6" : "#f3f4f6",
+                    color: selectedGender === "male" ? "white" : "#374151",
+                    boxShadow: selectedGender === "male" ? "0 20px 25px -5px rgba(59, 130, 246, 0.3)" : "none"
+                  }}
                 >
                   <input
                     type="radio"
@@ -42,20 +43,20 @@ function RegisterForm1() {
                     id="male"
                     value="male"
                     className="hidden"
-                    onChange={() => {setSelectedGender("male")}
-                  }
+                    onChange={() => setSelectedGender("male")}
                     checked={selectedGender === "male"}
                   />
                   남성
                 </label>
                 <label
                   htmlFor="female"
-                  className={`w-[140px] h-[40px] flex items-center justify-center cursor-pointer 
-                    ${
-                      selectedGender === "female"
-                        ? "!bg-blue-500 !text-white !shadow-lg !shadow-blue-300"
-                        : "!bg-gray-100 !text-gray-700 !hover:bg-blue-100"
-                    }`}
+                  className="w-[140px] h-[40px] flex items-center justify-center cursor-pointer rounded transition-all duration-300"
+                  // TailwindCSS는 정적 분석 도구이기 때문에 동적으로 처리해야 하는 부분은 style 속성으로 처리
+                  style={{
+                    backgroundColor: selectedGender === "female" ? "#ec4899" : "#f3f4f6",
+                    color: selectedGender === "female" ? "white" : "#374151",
+                    boxShadow: selectedGender === "female" ? "0 20px 25px -5px rgba(236, 72, 153, 0.3)" : "none"
+                  }}
                 >
                   <input
                     type="radio"
