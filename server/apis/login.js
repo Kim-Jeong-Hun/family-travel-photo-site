@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt'); // 비밀번호 해싱 라이브러리
+const bcrypt = require('bcryptjs'); // 비밀번호 해싱 라이브러리
 const pool = require('../pool.js'); // 데이터베이스 커넥션 풀
 
 router.post('/', async (req, res) => {
