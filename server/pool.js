@@ -3,9 +3,9 @@
 const oracledb = require('oracledb');
 
 const dbConfig = {
-    user: "kimjeonghun",
-    password: "910d11474f!",
-    connectString: "localhost:1521/xepdb1"
+    user: `${process.env.user}`,
+    password: `${process.env.password}`,
+    connectString: `${process.env.connectString}`
 };
 
 async function initialize() {
@@ -19,9 +19,16 @@ async function initialize() {
         console.log("✅ Oracle Connection Pool Created");
     } catch (err) {
         console.error("❌ Pool Initialization Error: ", err);
+        throw err;
     }
 }
 
+// 커넥션 풀에서 연결 하나를 가져오는 함수
+async function getConnection() {
+    return await oracledb.getConnection();
+}
+
+// 연결 종료 함수
 async function closePool() {
     await oracledb.getPool().close();
 }
