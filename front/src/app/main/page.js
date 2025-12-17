@@ -35,7 +35,8 @@ export default function Main() {
         let marker = null; // 마커 변수
         let overlay = null;
 
-        //동적 콘텐츠 생성 함수 예시 - 추후 수정
+        // 동적 콘텐츠 생성 함수 예시 - 추후 수정
+        // TailwindCSS는 동적 분석 불가능하므로 바닐라 CSS를 사용하여 구현할 것
         const createContent = (lat, lng) => `
   <div class="w-72 text-left overflow-hidden font-sans text-sm leading-normal">
     <div class="relative w-[220px] bg-white/100 rounded-lg shadow-lg border-b-2 border-r border-gray-300 overflow-hidden">

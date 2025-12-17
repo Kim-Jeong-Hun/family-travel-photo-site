@@ -16,7 +16,7 @@ function RegisterForm1() {
           </h2>
           {/* 로그인 폼 스타일*/}
           <div className="mt-[7%] flex flex-col gap-4 items-center justify-center">
-            <form name="loginform" method="get" action="">
+            <form name="loginform" method="POST" action=""> {/* 실제 POST는 AXIOS로 처리 */}
               {/* 이름 필드*/}
               <input
                 name="name"
@@ -70,9 +70,9 @@ function RegisterForm1() {
                   여성
                 </label>
               </div>
-              {/* 이메일, 비밀번호, 비밀번호 확인 필드*/}
+              {/* 아이디, 비밀번호, 비밀번호 확인 필드*/}
               <input
-                type="email"
+                type="text"
                 name="id"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
@@ -89,6 +89,7 @@ function RegisterForm1() {
               />
               <input
                 type="password"
+                name="password_check"
                 placeholder="비밀번호를 한 번 더 입력해 주세요."
                 className="w-[280px] h-[40px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
               />
