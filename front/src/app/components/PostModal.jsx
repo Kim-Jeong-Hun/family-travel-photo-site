@@ -1,18 +1,14 @@
 /*
- * 한 줄 입력창(input)과 여러 줄 입력창(textarea)이 포함된
- * placeholder가 있는 React 폼 컴포넌트입니다.
- * Tailwind CSS로 스타일링되었습니다.
- */
-
-/*
     main 페이지의 마커의 "이 장소 저장하기" 버튼 클릭 시
-    사진 여러 장과, 제목, 내용을 입력할 수 있는 모달 창 구현하는 것이 목표
+    사진 여러 장과 내용을 입력할 수 있는 모달 창 구현하는 것이 목표
+    모달 창은 동적으로 나타날 것이므로 .css 파일 만들어 사용
 */
 
 "use client";
 import React, { useState } from 'react';
+import '../styles/PostModal.css';
 
-function PostModal() {
+function PostModal({ isOpen, onClose, placeName, placeAddress }) {
   const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기 URL 상태
 
   // 폼 제출 시 실행될 함수 (기본 동작 방지)
@@ -31,19 +27,41 @@ function PostModal() {
     }
   };
 
+  // Modal이 열려있지 않으면 렌더링하지 않음
+  if (!isOpen) return null;
+
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          새 글 작성 (React)
-        </h2>
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2 className="modal-title">
+            새 글 작성
+          </h2>
+          <button
+            onClick={onClose}
+            className="modal-close-btn"
+          >
+            ✕
+          </button>
+        </div>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* 위치 정보 표시 */}
+        {placeName && (
+          <div className="location-info">
+            <p className="location-label">📍 이 장소가 맞나요? 📍</p>
+            <p className="location-name">{placeName}</p>
+            {placeAddress && (
+              <p className="location-address">{placeAddress}</p>
+            )}
+          </div>
+        )}
+        
+        <form onSubmit={handleSubmit} className="modal-form">
           {/* 사진 선택 폼 (File Input) */}
-          <div>
+          <div className="form-group">
             <label 
               htmlFor="image" 
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="form-label"
             >
               커버 사진 (선택)
             </label>
@@ -53,48 +71,25 @@ function PostModal() {
               name="image"
               accept="image/*"
               onChange={handleImageChange}
-              className="block w-full text-sm text-gray-500
-                         file:mr-4 file:py-2 file:px-4
-                         file:rounded-lg file:border-0
-                         file:text-sm file:font-semibold
-                         file:bg-blue-50 file:text-blue-700
-                         hover:file:bg-blue-100
-                         cursor-pointer"
+              className="file-input"
             />
             {/* 이미지 미리보기 */}
             {imagePreview && (
-              <div className="mt-4">
+              <div className="image-preview-container">
                 <img 
                   src={imagePreview} 
                   alt="선택한 이미지 미리보기" 
-                  className="w-full h-auto max-h-64 object-cover rounded-md shadow-md"
+                  className="image-preview"
                 />
               </div>
             )}
           </div>
-
-          {/* 한 줄 입력 폼 (Input) */}
-          <div>
-            <label 
-              htmlFor="title" 
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              제목
-            </label>
-            <input 
-              type="text" 
-              id="title"
-              name="title"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="제목을 입력하세요..."
-            />
-          </div>
           
           {/* 여러 줄 입력 폼 (Textarea) */}
-          <div>
+          <div className="form-group">
             <label 
               htmlFor="content" 
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="form-label"
             >
               내용
             </label>
@@ -102,16 +97,16 @@ function PostModal() {
               id="content"
               name="content"
               rows="6"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="form-textarea"
               placeholder="여기에 내용을 입력하세요..."
             ></textarea>
           </div>
           
           {/* 제출 버튼 */}
-          <div>
+          <div className="form-group">
             <button 
               type="submit"
-              className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              className="submit-btn"
             >
               저장하기
             </button>

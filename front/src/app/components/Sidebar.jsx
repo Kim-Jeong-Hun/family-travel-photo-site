@@ -1,29 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from 'next/link'; //next.js의 Link 사용하여 SPA 방식으로 개선
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const handleGlobalKeyDown = (e) => {
-      if(e.key === ' ' || e.key === 'Enter') {
-      e.preventDefault();
-      setIsOpen(prev => !prev);
-      }
-      if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
-      }
-  };
-
-  window.addEventListener('keydown', handleGlobalKeyDown);
-
-  // 컴포넌트 언마운트 시 이벤트 리스너 제거
-  return () => {
-    window.removeEventListener('keydown', handleGlobalKeyDown);
-  }
-
-  }, [isOpen]);
 
   return (
     <div className="mobile_btn">

@@ -1,8 +1,12 @@
 "use client"; // Next.js에서 클라이언트 컴포넌트임을 명시
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import PostModal from "../components/PostModal";
 
 export default function Main() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState({ name: '', address: '' });
+
   useEffect(() => {
 
     // 카카오맵 스크립트가 로드되지 않았다면 함수를 종료
@@ -25,126 +29,146 @@ export default function Main() {
         let zoomControl = new kakao.maps.ZoomControl(); // 줌 컨트롤 변수
 
         // 지도 우상단에 맵 종류 컨트롤 추가
-        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT); 
-
+        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+        
         // 지도 오른쪽에 줌 컨트롤 추가
         map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
 
-        // 3. 지도에 커스텀 오버레이 마커 생성 기능
+        // 3. 지도에 커스텀 오버레이 마커 생성용 변수 추가
         let marker = null; // 마커 변수
-        let overlay = null;
+        let overlay = null; // 오버레이 변수
 
-        // 동적 콘텐츠 생성 함수 예시 - 추후 수정
-        // TailwindCSS는 동적 분석 불가능하므로 바닐라 CSS를 사용하여 구현할 것
-        const createContent = (lat, lng) => `
-  <div class="w-72 text-left overflow-hidden font-sans text-sm leading-normal">
-    <div class="relative w-[220px] bg-white/100 rounded-lg shadow-lg border-b-2 border-r border-gray-300 overflow-hidden">
-      <div class="px-3 py-2 bg-gray-100/100 border-b border-gray-300">
-        <div class="flex justify-between items-center">
-          <span class="font-bold text-lg">선택한 위치</span>
-          <button onclick="closeOverlay()" class="w-4 h-4 hover:cursor-pointer" title="닫기">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        // 4. 좌표를 주소로 변환할 때 사용하는 Geocoder 객체, 
+        // 건물명, 카테고리, 연락처가 필요할 때 사용하는 Places 객체 추가
+        let geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 객체
+        let places = new window.kakao.maps.services.Places(); // Places 객체
+
+        // 동적 콘텐츠 생성 함수 - TailwindCSS는 정적으로만 동작하므로 바닐라 CSS로 구현
+        const createContent = (placeName, placePhone, placeCategory, placeAddress) => `
+  <div style="width: 300px; text-align: left; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; line-height: 1.5;">
+    <div style="position: relative; background-color: rgb(255, 255, 255); border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid rgb(209, 213, 219); overflow: hidden;">      
+      <!-- 내용 영역 -->
+      <div style="padding: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+          <div style="flex: 1; margin-right: 8px;">
+            <div style="font-weight: bold; font-size: 15px; margin-bottom: 4px; word-break: break-word;">${placeName}</div>
+            <div style="font-size: 12px; color: rgb(107, 114, 128); margin-bottom: 2px; word-break: break-word;">${placePhone}</div>
+            <div style="font-size: 12px; color: rgb(107, 114, 128); margin-bottom: 8px; word-break: break-word;">${placeCategory}</div>
+            <div style="font-size: 12px; color: rgb(107, 114, 128); margin-bottom: 8px; word-break: break-word;">${placeAddress}</div>
+          </div>
+          <!-- x 버튼 -->
+          <button onclick="closeOverlay()" style="width: 20px; height: 20px; background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;" title="닫기">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 18px; height: 18px;">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-      </div>
-      <div class="p-4 bg-white/100">
-        <div class="space-y-2 bg-white/100">
-          <div class="font-medium">위도: ${lat.toFixed(6)}</div>
-          <div class="font-medium">경도: ${lng.toFixed(6)}</div>
-          <button 
-            onclick="saveLocation(${lat}, ${lng})" 
-            class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-          >
-            이 장소 저장하기
-          </button>
-        </div>
+        <!-- 저장 버튼 스타일링 -->
+        <!-- 모양 :  -->
+        <!-- 민트색 버튼 + 마우스 이벤트 따라 명도 변경 -->
+        <button 
+          onclick="saveLocation('${placeName.replace(/'/g, "\\'")}', '${placeAddress.replace(/'/g, "\\'")}')" 
+          style="width: 100%; padding: 8px 12px; background-color: rgb(59, 181, 170); color: white; border-radius: 4px; border: none; cursor: pointer; font-weight: 500; font-size: 13px;"
+          onmouseover="this.style.backgroundColor='rgb(26, 143, 133)'"
+          onmouseout="this.style.backgroundColor='rgb(59, 181, 170)'"
+        >
+          이 장소 저장하기
+        </button>
       </div>
     </div>
   </div>
 `;
 
-        // 3.1. 지도 클릭 시 마커 생성 또는 위치 이동
+        // 3.1. 지도 클릭 시 클릭된 좌표에 마커 생성
         // 3.2. 마커 생성 후 마커에 커스텀 오버레이 표시
+        // 4.1. Geocoder, Places 객체로 주소, 건물명, 전화번호, 카테고리 받아오기
+        // 4.2. 오버레이 컨텐츠 실제 생성
         window.kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-          const latlng = mouseEvent.latLng; //마우스 클릭한 곳의 좌표 저장
-          const content = createContent(latlng.getLat(), latlng.getLng());
+          const latlng = mouseEvent.latLng; // 마우스 클릭한 곳의 좌표 저장 변수
 
-          if (!marker) {
-            marker = new window.kakao.maps.Marker({
-              position: latlng,
-              map: map,
-            });
+          // 장소 검색(Places객체)에 사용할 옵션 설정
+          let placeOptions = {
+            location: latlng,
+            radius: 20, // 20미터 이내
+            sort: kakao.maps.services.SortBy.DISTANCE
+          }
 
-            // 마커가 생성되면 오버레이도 생성
-            overlay = new window.kakao.maps.CustomOverlay({
-              content: content,
-              map: map,
-              position: marker.getPosition(),
-              xAnchor: 0.5,
-              yAnchor: 1.5
-            });
-          } else {
-            marker.setPosition(latlng);
-            if (overlay) {
-              overlay.setContent(content);
-              overlay.setPosition(latlng);
+          // 오버레이 업데이트 함수 (먼저 정의)
+          function updateOverlay(latlng, content) {
+            if (!marker) {
+              marker = new window.kakao.maps.Marker({
+                position: latlng,
+                map: map,
+              });
+
+              overlay = new window.kakao.maps.CustomOverlay({
+                content: content,
+                map: map,
+                position: marker.getPosition(),
+                xAnchor: 0.5, // 마커로부터 x거리
+                yAnchor: 1.3 // 마커로부터 y거리
+              });
+            } else {
+              marker.setPosition(latlng);
+              if (overlay) {
+                overlay.setContent(content);
+                overlay.setPosition(latlng);
+              }
             }
           }
+
+          // Places API를 사용해 좌표 근처의 POI 검색
+          places.keywordSearch('', function(result, status) {
+            let placeName = '위치 정보';
+            let placePhone = '전화번호';
+            let placeCategory = '카테고리';
+            let placeAddress = '';
+
+            if (status === kakao.maps.services.Status.OK && result.length > 0) {
+              // Places 검색 성공
+              let place = result[0];
+              placeName = place.place_name;
+              placePhone = place.phone || '전화번호';
+              placeCategory = place.category_name || '카테고리';
+              placeAddress = place.address_name;
+
+              const content = createContent(placeName, placePhone, placeCategory, placeAddress, '');
+              updateOverlay(latlng, content);
+            } else {
+              // Places 검색 실패 시 Geocoder 사용
+              geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) { 
+                if(status === window.kakao.maps.services.Status.OK) {
+                  if (result[0].road_address) {
+                    placeName = result[0].road_address.region_3depth_name || '위치 정보';
+                    placeAddress = result[0].road_address.address_name;
+                  } else if (result[0].address) {
+                    placeName = result[0].address.region_3depth_name || '위치 정보';
+                    placeAddress = result[0].address.address_name;
+                  }
+
+                  const content = createContent(placeName, placePhone, placeCategory, placeAddress);
+                  updateOverlay(latlng, content);
+                }
+              });
+            }
+          }, placeOptions);
         });        
 
-        window.saveLocation = function(lat, lng) {
-          console.log(`위치 저장 : 위도 ${lat}, 경도 ${lng}`);
+        // 오버레이 저장 버튼 클릭 시, 실행되는 함수
+        window.saveLocation = function(placeName, placeAddress) {
+          console.log(`위치 저장 : ${placeName}, ${placeAddress}`);
+          setSelectedPlace({ name: placeName, address: placeAddress });
+          setIsModalOpen(true);
         };
 
         // 오버레이 닫기 함수를 전역으로 설정
         window.closeOverlay = function() {
-          overlay.setMap(null);
-        }
-        
-        /*
-        // 4. 장소 검색 객체 생성
-        let markers = []; // 마커 담을 배열
-        let ps = new kakao.maps.services.Places(); // 장소 검색 객체 생성
-        let infowindow = new kakao.maps.InfoWindow({zIndex:1}); // 목록 또는 마커 클릭 시 장소명 표출할 인포윈도우 생성
-        
-        function searchPlaces() {
-          let keyword = document.getElementById('keyword').value;
-          
-          // 문자열 양쪽 공백 제거 안될 시, 검색 불가능하게
-          if (!keyword.replace(/^\s+|\s+$/g, '')) { 
-            alert('키워드를 입력해주세요!');
-            return false;
-          }
-
-          // 장소 검색 객체를 통해 키워드로 장소 검색 요청
-          ps.keywordSearch(keyword, placesSearchCB);
-        }
-
-        // 장소검색이 완료됐을 때 호출되는 콜백함수
-        function placesSearchCB(data, status, pagination) {
-          // 정상 검색 시, 결과 없을 시, 오류 발생 시의 경우 모두 구현
-          if (status === kakao.maps.services.Status.OK) { 
-            displayPlaces(data); // 검색 목록, 마커 표출
-            displayPagination(pagination); // 페이지 번호 표출
-          } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-            alert('검색 결과가 존재하지 않습니다.');
-            return;
-          } else if (status === kakao.maps.services.Status.ERROR) {
-            alert('검색 결과 중 오류가 발생했습니다.');
-            return;
+          if (overlay) {
+            overlay.setMap(null);
+            overlay = null;
           }
         }
-
-        // 검색 결과 목록과 마커를 표시하는 함수
-        function displayPlaces(places) {
-          
-        }
-        */
-       
-
       });
     };
 
@@ -154,6 +178,12 @@ export default function Main() {
 
   return (
     <>
+      <PostModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        placeName={selectedPlace.name}
+        placeAddress={selectedPlace.address}
+      />
       <div id="map" className="w-full h-full"> {/* 지도를 표시할 div */}
         <div id="keyword">
         </div>
@@ -163,9 +193,7 @@ export default function Main() {
 }
 
 /*
-- 지도 클릭 시 마커 + 오버레이 생성
-- 오버레이 초기 디자인 생성 (투명화 수정, 디자인 수정, 오버레이 내용 구현 필요)
-- 추후 useRef 훅 배워서 사용하기 위해 useRef 미리 import
+- 마커 오버레이 x 버튼 눌러서 닫을 시, 다음 좌표 클릭에 오버레이 생성 안되는 문제 수정 필요
 */
 
 /*
