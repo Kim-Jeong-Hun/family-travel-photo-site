@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
 
-const pool = require('./pool.js'); // 데이터베이스 풀 설정 파일
+const pool = require('./oracledb_setting.js'); // 데이터베이스 풀 설정 파일
 const cors = require('cors'); // 프론트 코드가 올라가있는 vercel과의 통신을 위해서 
 
-// cors 설정 : 프론트에서 데이터 요청이 가능하도록
+// cors 설정 : 프론트 URL에서 데이터 요청이 가능하도록
 app.use(cors({
     origin: 'https://family-travel-photo-site.vercel.app'
 }));
@@ -12,13 +12,17 @@ app.use(cors({
 // 프론트와의 데이터 통신용
 app.use(express.json());
 
-// 서버 시작 전 DB풀 초기화, 라우터 등록
+// 서버 시작 전 DB풀 초기화, 라우터 등록-처리
 pool.initialize().then(() => {
+    // 라우터 등록
     const signupRouter = require('./apis/signup.js');
     const loginRouter = require('./apis/login.js');
+    const postRouter = require('./apis/post.js');
     
-    app.use('/api/signup', signupRouter);
-    app.use('/api/login', loginRouter);
+    // 라우터 처리
+    app.use('/apis/signup', signupRouter);
+    app.use('/apis/login', loginRouter);
+    app.use('/apis/post', postRouter);
 
     app.get('/', (req, res) => {
     res.json({

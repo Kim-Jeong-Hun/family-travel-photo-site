@@ -86,6 +86,7 @@ export default function Main() {
         // 4.2. 오버레이 컨텐츠 실제 생성
         window.kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
           const latlng = mouseEvent.latLng; // 마우스 클릭한 곳의 좌표 저장 변수
+          console.log(latlng);
 
           // 장소 검색(Places객체)에 사용할 옵션 설정
           let placeOptions = {
@@ -167,6 +168,10 @@ export default function Main() {
           if (overlay) {
             overlay.setMap(null);
             overlay = null;
+          }
+          if (marker) {
+            marker.setMap(null);
+            marker = null;
           }
         }
       });

@@ -143,11 +143,20 @@
 
 .image-preview {
   width: 20%;
-  height: auto;
-  max-height: 256px;
+  height: 20%;
+  max-width: 64px;
+  max-height: 64px;
   object-fit: cover;
   border-radius: 6px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 이미지 개수 제한 안내문 */
+.image-limit-notice {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 2px;
 }
 
 /* 내용 칸 */
@@ -175,6 +184,7 @@
 .submit-btn {
   width: 100%;
   padding: 8px 16px;
+  margin-top: -10px;
   background-color: #3BB5AA;
   color: white;
   font-weight: 600;

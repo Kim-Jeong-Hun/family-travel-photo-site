@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs'); // 비밀번호 해싱 라이브러리
-const pool = require('../pool.js'); // 데이터베이스 커넥션 풀
+const pool = require('../oracledb_setting.js'); // 데이터베이스 커넥션 풀
 
 router.post('/', async (req, res) => {
     const {id, password} = req.body;
     let connection;
-
 
     try {
         // 아이디, 비밀번호 검증
         if (!id || !password) {
         return res.status(400).json({ 
                 success: false, 
-                message: '필수 항목을 입력해주세요.' 
+                message: '필수 항목을 입력해주세요.'
             });
         }
 

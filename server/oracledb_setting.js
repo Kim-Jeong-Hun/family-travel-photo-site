@@ -3,9 +3,9 @@
 const oracledb = require('oracledb');
 
 const dbConfig = {
-    user: `${process.env.user}`,
-    password: `${process.env.password}`,
-    connectString: `${process.env.connectString}`
+    user: process.env.ORACLEDB_USER,
+    password: process.env.ORACLEDB_PASSWORD,
+    connectString: process.env.CONNECTSTRING
 };
 
 async function initialize() {
@@ -33,4 +33,4 @@ async function closePool() {
     await oracledb.getPool().close();
 }
 
-module.exports = { initialize, closePool, oracledb };
+module.exports = { initialize, getConnection, closePool, oracledb };

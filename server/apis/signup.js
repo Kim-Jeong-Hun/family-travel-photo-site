@@ -1,12 +1,20 @@
+/*
+1. 프론트엔드에서 보낸 POST 요청이 render 서버의 /signup 엔드포인트에 도착
+2. 백엔드의 app.js에서 /signup 경로 처리
+3. signup.js에서 JSON 데이터를 req.body로 받음
+4. signup.js 파일의 router.poset() 핸들러 실행
+5. 핸들러에서 로직 처리 후 응답 전송
+*/
+
 const express = require('express'); 
 const router = express.Router();
 const bcrypt = require('bcryptjs'); // 비밀번호 해싱 라이브러리
-const pool = require('../pool.js'); // 데이터베이스 커넥션 풀
+const pool = require('../oracledb_setting.js'); // 데이터베이스 커넥션 풀
 
 // 회원가입 경로 접속 시 해야할 것들 (회원가입 로직)
 // 1. 유효성 검증
 // 2. 실제 회원가입 로직
-router.post('/register', async (req, res) => {
+router.post('/', async (req, res) => {
   const { name, gender, id, password, password_check } = req.body;
   let connection;
   

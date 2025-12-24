@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import '../styles/PostModal.css';
 
 function PostModal({ isOpen, onClose, placeName, placeAddress }) {
-  const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기 URL 상태
+  const [imagePreviews, setImagePreviews] = useState([]); // 이미지 미리보기 URL 상태 (배열)
 
   // 폼 제출 시 실행될 함수 (기본 동작 방지)
   const handleSubmit = (event) => {
@@ -20,10 +20,11 @@ function PostModal({ isOpen, onClose, placeName, placeAddress }) {
 
   // 파일 입력 변경 시 실행될 핸들러
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      // 선택된 파일의 URL을 생성하여 상태에 저장
-      setImagePreview(URL.createObjectURL(file));
+    const files = event.target.files;
+    if (files) {
+      // 선택된 파일들의 URL을 생성하여 상태에 저장
+      const previewUrls = Array.from(files).map(file => URL.createObjectURL(file));
+      setImagePreviews(previewUrls);
     }
   };
 
@@ -70,17 +71,24 @@ function PostModal({ isOpen, onClose, placeName, placeAddress }) {
               id="image"
               name="image"
               accept="image/*"
+              multiple
               onChange={handleImageChange}
               className="file-input"
             />
             {/* 이미지 미리보기 */}
-            {imagePreview && (
+            {imagePreviews.length > 0 && (
               <div className="image-preview-container">
-                <img 
-                  src={imagePreview} 
-                  alt="선택한 이미지 미리보기" 
-                  className="image-preview"
-                />
+                {imagePreviews.slice(0, 5).map((preview, index) => (
+                  <img 
+                    key={index}
+                    src={preview} 
+                    alt={`선택한 이미지 미리보기 ${index + 1}`} 
+                    className="image-preview"
+                  />
+                ))}
+                {imagePreviews.length > 5 && (
+                  <p className="image-limit-notice">미리보기는 최대 5개까지만 표시됩니다. <br /> (총 {imagePreviews.length}/10개 선택됨)</p>
+                )}
               </div>
             )}
           </div>
