@@ -1,3 +1,18 @@
+/*
+1. 프론트엔드에서 보낸 POST 요청이 render 서버의 /login 엔드포인트에 도착
+2. 백엔드의 app.js에서 /login 경로 처리
+3. login.js에서 JSON 데이터를 req.body로 받음
+4. login.js 파일의 router.poset() 핸들러 실행
+    - 아이디 조회 (없으면 존재하지 않는 아이디, 있으면 bcrypt로 입력된 비밀번호와 DB의 해싱된 비밀번호 비교)
+    - 비밀번호 일치 시 JWT 발급
+    - 프론트엔드에 JWT 토큰 반환
+    - 토큰을 로컬 스토리지/쿠키에 저장
+    (- 이후 게시물 작성 요청 시 JWT 토큰 요청
+    - 토큰 검증
+    - 게시물 저장, 처리) 
+5. 핸들러에서 로직 처리 후 응답 전송
+*/
+
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs'); // 비밀번호 해싱 라이브러리

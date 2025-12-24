@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getConnection, oracledb } = require('../oracledb_setting'); // pool.js에서 커넥션 풀과 oracledb 가져오기
-const { upload } = require('../cloudinary'); // Cloudinary 이미지 업로드 미들웨어
+const { getConnection, oracledb } = require('../oracledb_setting'); // 세팅 파일에서 커넥션 풀과 oracledb 가져오기
+const { upload } = require('../cloudinary_setting'); // Cloudinary 이미지 업로드 미들웨어
 
 /**
  * POST /write
@@ -10,7 +10,7 @@ const { upload } = require('../cloudinary'); // Cloudinary 이미지 업로드 �
  * - POSTS 테이블에 글 정보 저장
  * - POST_IMAGES 테이블에 이미지 URL들 저장
  */
-router.post('/write', upload.array('images', 10), async (req, res) => {
+router.post('/', upload.array('images', 10), async (req, res) => {
   let connection;
   try {
     // 클라이언트에서 전송받은 데이터

@@ -40,7 +40,8 @@ function RegisterForm1() {
         try {
             // 백엔드 회원가입 API에 POST 요청 전송
             const response = await axios.post(
-                'https://family-travel-photo-site.onrender.com/apis/signup',
+                /* 실제 연동 시 'https://family-travel-photo-site.onrender.com/apis/signup'*/
+                'http://localhost:5000/apis/signup',
                 {
                     name: name,
                     gender: selectedGender,
@@ -58,7 +59,7 @@ function RegisterForm1() {
         } catch (err) {
             // 회원가입 실패 시 에러 메시지 표시
             const errorMsg = err.response?.data?.message || "회원가입에 실패했습니다.";
-            setErrorMessage(errorMsg);
+            alert(errorMsg);
             console.error("회원가입 오류:", err);
         } finally {
             setLoading(false); // API 요청 완료 - 버튼 활성화
@@ -93,19 +94,19 @@ function RegisterForm1() {
                   htmlFor="male"
                   className="w-[140px] h-[40px] flex items-center justify-center cursor-pointer rounded transition-all duration-300"
                   style={{
-                    backgroundColor: selectedGender === "male" ? "#3b82f6" : "#f3f4f6",
-                    color: selectedGender === "male" ? "white" : "#374151",
-                    boxShadow: selectedGender === "male" ? "0 20px 25px -5px rgba(59, 130, 246, 0.3)" : "none"
+                    backgroundColor: selectedGender === "M" ? "#3b82f6" : "#f3f4f6",
+                    color: selectedGender === "M" ? "white" : "#374151",
+                    boxShadow: selectedGender === "M" ? "0 20px 25px -5px rgba(59, 130, 246, 0.3)" : "none"
                   }}
                 >
                   <input
                     type="radio"
                     name="gender"
                     id="male"
-                    value="male"
+                    value="M"
                     className="hidden"
-                    onChange={() => setSelectedGender("male")}
-                    checked={selectedGender === "male"}
+                    onChange={() => setSelectedGender("M")}
+                    checked={selectedGender === "M"}
                   />
                   남성
                 </label>
@@ -115,19 +116,19 @@ function RegisterForm1() {
                   htmlFor="female"
                   className="w-[140px] h-[40px] flex items-center justify-center cursor-pointer rounded transition-all duration-300"
                   style={{
-                    backgroundColor: selectedGender === "female" ? "#ec4899" : "#f3f4f6",
-                    color: selectedGender === "female" ? "white" : "#374151",
-                    boxShadow: selectedGender === "female" ? "0 20px 25px -5px rgba(236, 72, 153, 0.3)" : "none"
+                    backgroundColor: selectedGender === "F" ? "#ec4899" : "#f3f4f6",
+                    color: selectedGender === "F" ? "white" : "#374151",
+                    boxShadow: selectedGender === "F" ? "0 20px 25px -5px rgba(236, 72, 153, 0.3)" : "none"
                   }}
                 >
                   <input
                     type="radio"
                     name="gender"
                     id="female"
-                    value="female"
+                    value="F"
                     className="hidden"
-                    onChange={() => setSelectedGender("female")}
-                    checked={selectedGender === "female"}
+                    onChange={() => setSelectedGender("F")}
+                    checked={selectedGender === "F"}
                   />
                   여성
                 </label>

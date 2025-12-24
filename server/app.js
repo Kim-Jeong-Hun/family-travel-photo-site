@@ -6,7 +6,10 @@ const cors = require('cors'); // 프론트 코드가 올라가있는 vercel과�
 
 // cors 설정 : 프론트 URL에서 데이터 요청이 가능하도록
 app.use(cors({
-    origin: 'https://family-travel-photo-site.vercel.app'
+    origin: [
+        'https://family-travel-photo-site.vercel.app',
+        'http://localhost:3000' // 로컬 테스트용
+    ]
 }));
 
 // 프론트와의 데이터 통신용
@@ -17,12 +20,12 @@ pool.initialize().then(() => {
     // 라우터 등록
     const signupRouter = require('./apis/signup.js');
     const loginRouter = require('./apis/login.js');
-    const postRouter = require('./apis/post.js');
+    // const postRouter = require('./apis/post.js'); // 임시 비활성화 (cloudinary 파일 없음)
     
     // 라우터 처리
     app.use('/apis/signup', signupRouter);
     app.use('/apis/login', loginRouter);
-    app.use('/apis/post', postRouter);
+    // app.use('/apis/post', postRouter); // 임시 비활성화
 
     app.get('/', (req, res) => {
     res.json({

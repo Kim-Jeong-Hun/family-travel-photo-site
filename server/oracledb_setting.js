@@ -1,11 +1,12 @@
 // pool.js 파일 = 데이터베이스 커넥션 풀을 관리하는 파일
 
+require('dotenv').config(); // .env.local 파일에서 환경 변수 로드
 const oracledb = require('oracledb');
 
 const dbConfig = {
     user: process.env.ORACLEDB_USER,
     password: process.env.ORACLEDB_PASSWORD,
-    connectString: process.env.CONNECTSTRING
+    connectString: process.env.CONNECT_STRING
 };
 
 async function initialize() {

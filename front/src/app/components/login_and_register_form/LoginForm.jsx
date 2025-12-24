@@ -29,7 +29,7 @@ function LoginForm() {
           <div className="flex flex-col gap-4 mt-[25%] items-center justify-center">
             <form name="loginform" onSubmit={handleSubmit}>
               <input
-                type="email"
+                type="text"
                 placeholder="아이디"
                 className="w-[280px] h-[40px] mt-[10px] mb-[5px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
               />
@@ -39,7 +39,7 @@ function LoginForm() {
                 className="w-[280px] h-[40px] mb-[10px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
               />
               <div>
-                <Link href="/register" className="underline text-[#FFF]">
+                <Link href="/signup" className="underline text-[#FFF]">
                   회원가입
                 </Link>
                 <a className="text-[#FFF]"> / </a>
