@@ -16,22 +16,20 @@ function RegisterForm1() {
     
     // ===== UI 상태 관리 =====
     const [loading, setLoading] = useState(false); // API 요청 중 여부
-    const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 표시
 
     // ===== 회원가입 처리 함수 =====
     const handleRegister = async (e) => {
         e.preventDefault(); // 기본 폼 제출 동작 방지
-        setErrorMessage(""); // 이전 에러 메시지 초기화
         
         // 필수 입력값 검증
         if (!name || !selectedGender || !id || !password || !passwordCheck) {
-            setErrorMessage("모든 항목을 입력해주세요.");
+            alert("필수 항목을 입력해주세요.");
             return;
         }
 
         // 비밀번호 일치 여부 검증
         if (password !== passwordCheck) {
-            setErrorMessage("비밀번호가 일치하지 않습니다.");
+            alert("비밀번호가 일치하지 않습니다.");
             return;
         }
 
@@ -40,8 +38,8 @@ function RegisterForm1() {
         try {
             // 백엔드 회원가입 API에 POST 요청 전송
             const response = await axios.post(
-                /* 실제 연동 시 'https://family-travel-photo-site.onrender.com/apis/signup'*/
-                'http://localhost:5000/apis/signup',
+                'https://family-travel-photo-site.onrender.com/apis/signup', // 실제 배포된 서버
+                //'http://localhost:5000/apis/signup', // 로컬 서버
                 {
                     name: name,
                     gender: selectedGender,
@@ -60,9 +58,9 @@ function RegisterForm1() {
             // 회원가입 실패 시 에러 메시지 표시
             const errorMsg = err.response?.data?.message || "회원가입에 실패했습니다.";
             alert(errorMsg);
-            console.error("회원가입 오류:", err);
+            console.log(errorMsg);
         } finally {
-            setLoading(false); // API 요청 완료 - 버튼 활성화
+            setLoading(false); // API 요청 완료 - 회원가입 버튼 다시 활성화
         }
     };
 
@@ -172,14 +170,6 @@ function RegisterForm1() {
                 disabled={loading}
                 className="mb-[10px] mt-[40px] w-[280px] h-[45px] bg-[#ffe500] border-none rounded-[30px] text-[16px] font-bold text-black cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#ffdd00] disabled:opacity-50 disabled:cursor-not-allowed"
               />
-              
-              {/* ===== 에러 메시지 표시 영역 ===== */}
-              {/* errorMessage가 있을 때만 렌더링 */}
-              {errorMessage && (
-                <div className="mt-[20px] p-3 bg-red-100 border border-red-400 text-red-700 rounded text-[14px]">
-                  {errorMessage}
-                </div>
-              )}
               
               {/* ===== 로그인 페이지 링크 ===== */}
               <div>

@@ -16,11 +16,10 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs'); // 비밀번호 해싱 라이브러리
-const pool = require('../oracledb_setting.js'); // 데이터베이스 커넥션 풀
+const supabase = require('../supabase_setting.js'); // supabase 설정 불러오기
 
 router.post('/', async (req, res) => {
     const {id, password} = req.body;
-    let connection;
 
     try {
         // 아이디, 비밀번호 검증

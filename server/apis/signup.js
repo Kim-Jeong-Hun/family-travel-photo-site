@@ -9,17 +9,16 @@
 const express = require('express'); 
 const router = express.Router();
 const bcrypt = require('bcryptjs'); // 비밀번호 해싱 라이브러리
-const pool = require('../oracledb_setting.js'); // 데이터베이스 커넥션 풀
+const supabase = require('../supabase_setting.js'); // supabase 설정 불러오기
 
 // 회원가입 경로 접속 시 해야할 것들 (회원가입 로직)
 // 1. 유효성 검증
 // 2. 실제 회원가입 로직
 router.post('/', async (req, res) => {
-  const { name, gender, id, password, password_check } = req.body;
-  let connection;
+  const { name, gender, id, password, password_check } = req.body; 
   
   try {
-    // 필수 입력값 검증
+    // 1. 필수 입력값 검증
     // 400 Bad Request(잘못된 요청) : 
     // 클라이언트가 보낸 요청의 파라미터가 서버의 유효성 검사(Validation)를 통과하지 못한 경우에 사용하는 표준 코드
     if (!id || !gender || !password || !name) {
@@ -29,25 +28,7 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // 풀에서 데이터베이스 연결 가져오기
-    connection = await pool.oracledb.getConnection();
-
-    // 데이터베이스 아이디 중복 확인
-    const checkId = await connection.execute(
-      `SELECT COUNT(*) as cnt FROM USERS WHERE USER_ID = :id`,
-      { id: id },
-      { outFormat: pool.oracledb.OUT_FORMAT_OBJECT }
-    );
-
-    // 409 Conflict(충돌) : 사용자의 요청이 서버의 상태와 충돌하여 응답하는 코드
-    if (checkId.rows[0].CNT > 0) {
-        return res.status(409).json({ 
-            success: false, 
-            message: '이미 가입된 아이디입니다.' 
-        });
-    }
-
-    // 비밀번호 검증
+    // 2. 비밀번호 검증
     // 400 Bad Request(잘못된 요청) : 
     // 클라이언트가 보낸 요청의 파라미터가 서버의 유효성 검사(Validation)를 통과하지 못한 경우에 사용하는 표준 코드
     if(password !== password_check) {
@@ -58,43 +39,58 @@ router.post('/', async (req, res) => {
         });
     };
 
-    // 위의 검증이 모두 끝난 경우 회원가입 실시
+    // 3. 데이터베이스 아이디 중복 확인
+    // Supabase는 select()의 결과로 data와 error를 반환
+    const { data: existingUser, error: checkError } = await supabase
+      .from('users')
+      .select('user_id')
+      .eq('user_id', id)
+      .single(); // 단건 조회
+
+    // existingUser가 존재하면 중복된 아이디
+    // 409 Conflict(충돌) : 사용자의 요청이 서버의 상태와 충돌
+    if(existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: '이미 가입된 사용자입니다.'
+      });
+    }
+
+    // 1, 2, 3 검증이 모두 끝난 경우 회원가입 로직 실행
     // 비밀번호 해싱
     const hashedPassword = await bcrypt.hash(password, 10); // salt 라운드: 10
 
-    // 사용자 데이터 데이터베이스 삽입 SQL문 실행
-    const result = await connection.execute(
-      `INSERT INTO USERS (USER_ID, PASSWORD, USER_NAME, GENDER, NICKNAME) 
-       VALUES (:id, :password, :name, :gender, :name)`,
-      {
-        id: id,
-        password: hashedPassword, // 해싱된 비밀번호 저장
-        name: name,
-        gender: gender
-      },
-      { autoCommit: true }
-    );
+    // 사용자 데이터 삽입
+    // insert() 메서드는 배열 형태로 인자 입력.
+    const { error: insertError } = await supabase
+      .from('users')
+      .insert([
+        { 
+          user_id: id, 
+          password: hashedPassword, 
+          user_name: name, 
+          gender: gender, 
+          nickname: name // 처음에는 닉네임 대신 이름 삽입
+        }
+      ]);
 
+    if (insertError) throw insertError;
+
+    // 회원가입 완료
+    // 201 Created(생성됨) : 요청이 성공적으로 처리되어서 리소스가 만들어졌음을 의미
     res.status(201).json({ 
       success: true, 
       message: '회원가입이 완료되었습니다.' 
     });
 
   } catch (err) {
-    console.error('회원가입 오류:', err);
+    console.error('회원가입 오류:', err.message);
+    // 500 Internal Server Error(내부 서버 오류): 서버에 오류가 발생해 작업을 수행할 수 없을 때 사용
     res.status(500).json({ 
       success: false, 
-      message: '회원가입에 실패했습니다.' 
+      message: '회원가입 과정에서 서버 오류가 발생했습니다.' 
     });
-  } finally {
-    if (connection) {
-      try {
-        await connection.close(); // 데이터베이스 연결 풀에 반납
-      } catch (err) {
-        console.error('연결 종료 오류:', err);
-      }
-    }
-  }
+  } 
 });
 
 module.exports = router;
