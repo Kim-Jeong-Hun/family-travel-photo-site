@@ -2,7 +2,7 @@
 1. 프론트엔드에서 보낸 POST 요청이 render 서버의 /login 엔드포인트에 도착
 2. 백엔드의 app.js에서 /login 경로 처리
 3. login.js에서 JSON 데이터를 req.body로 받음
-4. login.js 파일의 router.poset() 핸들러 실행
+4. login.js 파일의 router.post() 핸들러 실행
     - 아이디 조회 (없으면 존재하지 않는 아이디, 있으면 bcrypt로 입력된 비밀번호와 DB의 해싱된 비밀번호 비교)
     - 비밀번호 일치 시 JWT 발급
     - 프론트엔드에 JWT 토큰 반환
@@ -76,7 +76,7 @@ router.post('/', async (req, res) => {
         // 500 Internal Server Error(내부 서버 오류): 서버에 오류가 발생해 작업을 수행할 수 없을 때 사용
         res.status(500).json({ 
             success: false,
-            message: "회원가입 과정에서 서버 오류가 발생했습니다." 
+            message: "로그인 과정에서 서버 오류가 발생했습니다." 
         });
     }
 });
