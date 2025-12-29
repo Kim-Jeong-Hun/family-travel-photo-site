@@ -188,7 +188,7 @@ export default function Main() {
 
     onLoadKakaoMap();
     console.log("kakao 지도 출력");
-  }, []); // 의존성 배열이 비어 있으므로 최초 1회만 실행
+  }, [router]); // 의존성 배열이 비어 있으므로 최초 1회만 실행
 
   return (
     <>

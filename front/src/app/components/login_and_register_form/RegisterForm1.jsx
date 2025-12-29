@@ -173,7 +173,7 @@ function RegisterForm1() {
               
               {/* ===== 로그인 페이지 링크 ===== */}
               <div>
-                <Link href="/" className="underline text-[#FFF]">
+                <Link href="/login" className="underline text-[#FFF]">
                   로그인하기
                 </Link>
               </div>
