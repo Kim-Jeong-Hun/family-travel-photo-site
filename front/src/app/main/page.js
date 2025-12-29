@@ -1,11 +1,9 @@
 "use client"; // Next.js에서 클라이언트 컴포넌트임을 명시
 
 import { useEffect, useState} from "react";
-import { useRouter } from 'next/navigation';
 import PostModal from "../components/PostModal";
 
 export default function Main() {
-  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState({ name: '', address: '' });
 
@@ -158,12 +156,12 @@ export default function Main() {
         });        
 
         // 오버레이 저장 버튼 클릭 시, 실행되는 함수
-        window.saveLocation = function(placeName, placeAddress) {
+        window.saveLocation = (placeName, placeAddress) => {
           // 토큰 있으면 modal이 열리고, 없으면 로그인 페이지로 추방하는 로직 추가
-          const token = localStorage.getItem('token');
-          if(!token) {
+          const currentToken = localStorage.getItem('token');
+          if(!currentToken) {
             alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
-            router.push("/login"); // login 페이지는 새로고침이 필요없으므로 router 이용
+            window.location.href = "/login";
             return;
           }
 
@@ -188,7 +186,7 @@ export default function Main() {
 
     onLoadKakaoMap();
     console.log("kakao 지도 출력");
-  }, [router]); // 의존성 배열이 비어 있으므로 최초 1회만 실행
+  }, []); // 의존성 배열이 비어 있으므로 최초 1회만 실행
 
   return (
     <>
