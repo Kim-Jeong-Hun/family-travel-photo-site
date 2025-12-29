@@ -1,14 +1,15 @@
 "use client"; // Next.js에서 클라이언트 컴포넌트임을 명시
 
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
+import { useRouter } from 'next/navigation';
 import PostModal from "../components/PostModal";
 
 export default function Main() {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState({ name: '', address: '' });
 
   useEffect(() => {
-
     // 카카오맵 스크립트가 로드되지 않았다면 함수를 종료
     if (!window.kakao.maps) {
       return;
@@ -158,6 +159,14 @@ export default function Main() {
 
         // 오버레이 저장 버튼 클릭 시, 실행되는 함수
         window.saveLocation = function(placeName, placeAddress) {
+          // 토큰 있으면 modal이 열리고, 없으면 로그인 페이지로 추방하는 로직 추가
+          const token = localStorage.getItem('token');
+          if(!token) {
+            alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
+            router.push("/login"); // login 페이지는 새로고침이 필요없으므로 router 이용
+            return;
+          }
+
           console.log(`위치 저장 : ${placeName}, ${placeAddress}`);
           setSelectedPlace({ name: placeName, address: placeAddress });
           setIsModalOpen(true);

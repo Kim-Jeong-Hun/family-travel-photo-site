@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import IntroAnimation from './components/IntroAnimation';
-import LoginForm from './components/login_and_register_form/LoginForm';
 
 export default function Home() {
-
+  const router = useRouter();
   const [showIntroAnimation, setShowIntroAnimation] = useState(true);
 
   useEffect(() => {
@@ -18,7 +18,5 @@ export default function Home() {
 
   if (showIntroAnimation) return <IntroAnimation />;
 
-  return (
-    <LoginForm />
-  );
+  router.push('/login');
 }

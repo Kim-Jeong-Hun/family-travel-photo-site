@@ -25,7 +25,7 @@ function LoginForm() {
       if(success) {
         localStorage.setItem('accessToken', token); // 서버에서 받은 JWT 토큰을 로컬 스토리지에 저장
         console.log(message); // 성공적으로 로그인되었습니다.
-        alert('로그인되었습니다!');
+        alert('성공적으로 로그인되었습니다!');
         window.location.href = "/main";
       }
     } catch (error) {
