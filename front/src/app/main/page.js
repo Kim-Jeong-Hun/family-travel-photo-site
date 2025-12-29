@@ -158,7 +158,7 @@ export default function Main() {
         // 오버레이 저장 버튼 클릭 시, 실행되는 함수
         window.saveLocation = (placeName, placeAddress) => {
           // 토큰 있으면 modal이 열리고, 없으면 로그인 페이지로 추방하는 로직 추가
-          const currentToken = localStorage.getItem('token');
+          const currentToken = localStorage.getItem('accessToken');
           if(!currentToken) {
             alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
             window.location.href = "/login";
