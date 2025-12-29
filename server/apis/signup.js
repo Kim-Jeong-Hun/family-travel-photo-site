@@ -55,8 +55,8 @@ router.post('/', async (req, res) => {
     // Supabase는 select()의 결과로 data와 error를 반환
     const { data: existingUser, error: checkError } = await supabase
       .from('users')
-      .select('user_id')
-      .eq('user_id', id)
+      .select('login_id')
+      .eq('login_id', id)
       .single(); // 단건 조회 (객체 반환)
 
     // existingUser가 존재하면 중복된 아이디
@@ -78,7 +78,7 @@ router.post('/', async (req, res) => {
       .from('users')
       .insert([
         { 
-          user_id: id, 
+          login_id: id, 
           password: hashedPassword, 
           user_name: name, 
           gender: gender, 

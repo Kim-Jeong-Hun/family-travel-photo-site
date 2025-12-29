@@ -73,9 +73,10 @@ router.post('/', async (req, res) => {
    
     } catch (err) {
         console.error('로그인 오류:', err);
+        // 500 Internal Server Error(내부 서버 오류): 서버에 오류가 발생해 작업을 수행할 수 없을 때 사용
         res.status(500).json({ 
             success: false,
-            message: "로그인에 실패하셨습니다." 
+            message: "회원가입 과정에서 서버 오류가 발생했습니다." 
         });
     }
 });
