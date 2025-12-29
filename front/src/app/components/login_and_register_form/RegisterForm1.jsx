@@ -155,7 +155,7 @@ function RegisterForm1() {
               {/* ===== 비밀번호 확인 입력 필드 ===== */}
               <input
                 type="password"
-                name="password_check"
+                name="passwordCheck"
                 value={passwordCheck}
                 onChange={(e) => setPasswordCheck(e.target.value)}
                 placeholder="비밀번호를 한 번 더 입력해 주세요."

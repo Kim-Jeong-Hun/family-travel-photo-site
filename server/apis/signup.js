@@ -2,7 +2,7 @@
 1. 프론트엔드에서 보낸 POST 요청이 render 서버의 /signup 엔드포인트에 도착
 2. 백엔드의 app.js에서 /signup 경로 처리
 3. signup.js에서 JSON 데이터를 req.body로 받음
-4. signup.js 파일의 router.poset() 핸들러 실행
+4. signup.js 파일의 router.post() 핸들러 실행
 5. 핸들러에서 로직 처리 후 응답 전송
 */
 
