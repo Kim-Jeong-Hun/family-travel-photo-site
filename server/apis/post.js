@@ -8,9 +8,9 @@ const supabase = require('../supabase_setting'); // supabase 설정 불러오기
 - 프론트에서 요청 시 유효한 Signature와 Timestamp를 반환
 - 프론트는 이를 사용해 Cloudinary에 직접 업로드
  */
+
 router.post('/signature', async (req, res) => {
   try {
-    const { userId } = req.body;
     const timestamp = Math.floor(Date.now() / 1000);
     const folder  = `user|${유저아이디}`; // 폴더를 유저 아이디로 동적으로 만들기
 

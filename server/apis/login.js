@@ -14,67 +14,69 @@
 */
 
 const express = require('express');
-const router = express.Router();
 const bcrypt = require('bcryptjs'); // 비밀번호 해싱 라이브러리
+const router = express.Router();
+const jwt = require('jsonwebtoken');
 const supabase = require('../supabase_setting.js'); // supabase 설정 불러오기
 
 router.post('/', async (req, res) => {
     const {id, password} = req.body;
 
     try {
-        // 아이디, 비밀번호 검증
+        // 1. 필수 입력값 검증
         if (!id || !password) {
-        return res.status(400).json({ 
+            return res.status(400).json({ 
                 success: false, 
                 message: '필수 항목을 입력해주세요.'
             });
         }
 
-        // 풀에서 데이터베이스 연결 가져오기
-        connection = await pool.oracledb.getConnection();
-
-        // SQL문 실행하여 가져온 ID를 result에 저장
-        const result = await connection.execute(
-            `SELECT PASSWORD FROM USERS WHERE USER_ID = :id`, {id: id},
-            { outFormat: pool.oracledb.OUT_FORMAT_OBJECT });
-            
-        // ID 길이가 0인 경우
-        if (result.rows.length === 0) {
-            return res.status(401).json({ 
+        // 2. 데이터베이스에 해당 아이디를 가진 유저 조회 (user_id : 토큰을 위해 조회)
+        const { data: userData, error: checkError } = await supabase
+            .from('users')
+            .select('user_id, login_id, password')
+            .eq('login_id', id)
+            .single(); // 단건 조회 (객체 반환)
+        
+        // 3. 아이디 존재 여부 확인 
+        // 401 Unauthorized(권한 없음) : 로그인 등 인증이 필요한 리소스에 인증 없이 접근할 경우 발생
+        // 아이디가 틀린 경우 - 보안을 위해 메시지는 '아이디 또는 비밀번호'로 출력
+        if(checkError || !userData) {
+            return res.status(401).json({
                 success: false,
-                message: "아이디가 존재하지 않습니다."
-            });
+                message: '아이디 또는 비밀번호가 일치하지 않습니다.'
+            })
         }
 
-        // 입력한 비밀번호와 저장된 비밀번호 비교
-        const match = await bcrypt.compare(password, result.rows[0].PASSWORD);
+        // 4. 아이디가 일치한다면 비밀번호 해시값 비교
+        const passwordIsMatch = await bcrypt.compare(password, userData.password);
 
-        // 비밀번호 일치 시
-        if(match) {
-            res.json({
+        // 5. 로그인 성공 및 jwt 토큰 발급
+        if(passwordIsMatch) {
+            const accessToken = jwt.sign(
+                { uid: userData.user_id, login_id: userData.login_id},
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            )
+            return res.status(200).json({
                 success: true,
-                message: "로그인에 성공하셨습니다."
+                message: '성공적으로 로그인되었습니다.',
+                token: accessToken // 프론트엔드로 토큰 전달
             });
-        } else {
-            res.status(401).json({
+            // jwt 토큰 발급 로직
+        } else { // 비밀번호가 틀린 경우 - 보안을 위해 메시지는 '아이디 또는 비밀번호'로 출력
+            return res.status(401).json({
                 success: false,
-                message: "비밀번호가 일치하지 않습니다."
+                message: '아이디 또는 비밀번호가 일치하지 않습니다.'
             });
-        }   
+        }
+   
     } catch (err) {
         console.error('로그인 오류:', err);
         res.status(500).json({ 
             success: false,
             message: "로그인에 실패하셨습니다." 
         });
-    } finally {
-        if(connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error(err);
-            }
-        }
     }
 });
 

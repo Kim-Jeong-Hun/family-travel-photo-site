@@ -21,10 +21,23 @@ router.post('/', async (req, res) => {
     // 1. 필수 입력값 검증
     // 400 Bad Request(잘못된 요청) : 
     // 클라이언트가 보낸 요청의 파라미터가 서버의 유효성 검사(Validation)를 통과하지 못한 경우에 사용하는 표준 코드
-    if (!id || !gender || !password || !name) {
+    if(!id || !gender || !password || !name) {
       return res.status(400).json({ 
         success: false, 
         message: '필수 항목을 입력해주세요.' 
+      });
+    }
+
+    // 1.1 아이디와 비밀번호는 4자 이상, 50자 이하여야 함. (Supabase)제약 조건
+    if(id.length < 4 || id.length > 50) {
+      return res.status(400).json({
+        success: false,
+        message: "아이디와 비밀번호는 4자 미만이거나, 50자를 초과할 수 없습니다."
+      });
+    } else if(password.length < 4 || password.length > 50) {
+      return res.status(400).json({
+        success: false,
+        message: "아이디와 비밀번호는 4자 미만이거나, 50자를 초과할 수 없습니다."
       });
     }
 
@@ -35,7 +48,6 @@ router.post('/', async (req, res) => {
         return res.status(400).json({
             success: false,
             message: '비밀번호가 일치하지 않습니다.',
-
         });
     };
 
@@ -45,7 +57,7 @@ router.post('/', async (req, res) => {
       .from('users')
       .select('user_id')
       .eq('user_id', id)
-      .single(); // 단건 조회
+      .single(); // 단건 조회 (객체 반환)
 
     // existingUser가 존재하면 중복된 아이디
     // 409 Conflict(충돌) : 사용자의 요청이 서버의 상태와 충돌
