@@ -29,12 +29,7 @@ router.post('/', async (req, res) => {
     }
 
     // 1.1 아이디와 비밀번호는 4자 이상, 50자 이하여야 함. (Supabase)제약 조건
-    if(id.length < 4 || id.length > 50) {
-      return res.status(400).json({
-        success: false,
-        message: "아이디와 비밀번호는 4자 미만이거나, 50자를 초과할 수 없습니다."
-      });
-    } else if(password.length < 4 || password.length > 50) {
+    if(id.length < 4 || id.length > 50 || password.length < 4 || password.length > 50) {
       return res.status(400).json({
         success: false,
         message: "아이디와 비밀번호는 4자 미만이거나, 50자를 초과할 수 없습니다."
@@ -49,24 +44,23 @@ router.post('/', async (req, res) => {
             success: false,
             message: '비밀번호가 일치하지 않습니다.',
         });
-    };
+    }
 
     // 3. 데이터베이스 아이디 중복 확인
     // Supabase는 select()의 결과로 data와 error를 반환
-    const { data: existingUser, error: checkError } = await supabase
+    const { data: existingUser } = await supabase
       .from('users')
       .select('login_id')
-      .eq('login_id', id)
-      .single(); // 단건 조회 (객체 반환)
+      .eq('login_id', id);
 
     // existingUser가 존재하면 중복된 아이디
     // 409 Conflict(충돌) : 사용자의 요청이 서버의 상태와 충돌
-    if(existingUser) {
-      return res.status(409).json({
-        success: false,
-        message: '이미 가입된 사용자입니다.'
-      });
-    }
+    if (existingUser && existingUser.length > 0) {
+  return res.status(409).json({
+    success: false,
+    message: '이미 가입된 사용자입니다.'
+  });
+}
 
     // 1, 2, 3 검증이 모두 끝난 경우 회원가입 로직 실행
     // 비밀번호 해싱
