@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // 1.1 아이디와 비밀번호는 4자 이상, 50자 이하여야 함. (Supabase)제약 조건
-    if(id.length < 4 || id.length > 50 || password.length < 4 || password.length > 50) {
+    // 1.1 아이디와 비밀번호는 4자 이상이어야 함. (Supabase)제약 조건
+    if(id.length < 4 || password.length < 4) {
       return res.status(400).json({
         success: false,
         message: "아이디와 비밀번호는 4자 미만이거나, 50자를 초과할 수 없습니다."
@@ -61,6 +61,8 @@ router.post('/', async (req, res) => {
     message: '이미 가입된 사용자입니다.'
   });
 }
+
+
 
     // 1, 2, 3 검증이 모두 끝난 경우 회원가입 로직 실행
     // 비밀번호 해싱
