@@ -194,7 +194,7 @@ export default function Main() {
             marker = null;
           }
         }
-      });
+      }});
     };
 
     onLoadKakaoMap();
