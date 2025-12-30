@@ -11,7 +11,7 @@ axios로 서버에 요청을 보내어 서명 받아온 후(getCloudinarySignatu
 */
 
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/PostModal.css';
 
@@ -21,14 +21,19 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
   const [imagePreviews, setImagePreviews] = useState([]); // 이미지 미리보기 URL 상태 (배열)
   const [isUploading, setIsUploading] = useState(false); // 업로드 로딩 상태 추가
 
+  // 모달이 닫힐 때 메모리 해제
+  useEffect(() => {
+    return() => {
+      imagePreviews.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [isOpen]);
+
   // Axios를 사용하여 발급받은 token을 다시 서버에 보내어 신원을 확인하고
   // Cloudinary Signature 서명 요청하는 로직
   // Bearer token :소지(bear)한 사람이 권한을 가지는 토큰
-  const getCloudinarySignature = async () => {
+  const getCloudinarySignature = async (token) => {
     try {
-
       // 서버에 토큰 전달하여 사용자 확인
-      const token = localStorage.getItem('accessToken');
       const response = await axios.post(
         'https://family-travel-photo-site.onrender.com/apis/post/signature',
         {},
@@ -67,7 +72,7 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
       const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
 
       // 1. 서명 요청하여 받아오기
-      const { signature, timestamp, folder } = await getCloudinarySignature();
+      const { signature, timestamp, folder } = await getCloudinarySignature(token);
 
       // 2. 여러 장의 사진을 동시에 Cloudinary로 업로드
       // 이후 URL 배열 생성
