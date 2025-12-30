@@ -175,10 +175,14 @@ export default function Main() {
           }
 
           console.log(`위치 저장 : ${placeName}, ${placeAddress}`);
-          setSelectedPlace({...prev, name: placeName, address: placeAddress});
-          setIsModalOpen(true);
-        };
-
+          setSelectedPlace(prev => ({
+            ...prev, 
+            name: placeName, 
+            address: placeAddress
+          }));
+          
+        setIsModalOpen(true);
+        
         // 오버레이 닫기 함수를 전역으로 설정
         window.closeOverlay = function() {
           if (overlay) {
