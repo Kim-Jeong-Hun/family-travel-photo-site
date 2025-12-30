@@ -15,14 +15,30 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/PostModal.css';
 
-function PostModal({ isOpen, onClose, placeName, placeAddress }) {
+// main페이지의 page.js에서 props로 열리고 닫힌 상태와 장소, 주소, 위도, 경도 전달받음.
+function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
   const [imageFiles, setImageFiles] = useState([]); // 실제 파일 객체 저장
   const [imagePreviews, setImagePreviews] = useState([]); // 이미지 미리보기 URL 상태 (배열)
+  const [isUploading, setIsUploading] = useState(false); // 업로드 로딩 상태 추가
 
-  // Axios를 사용하여 서버에 Cloudinary Signature 서명 요청하는 로직
+  // Axios를 사용하여 발급받은 token을 다시 서버에 보내어 신원을 확인하고
+  // Cloudinary Signature 서명 요청하는 로직
+  // Bearer token :소지(bear)한 사람이 권한을 가지는 토큰
   const getCloudinarySignature = async () => {
-    try { 
-      const response = await axios.post('https://family-travel-photo-site.onrender.com/apis/post/signature');
+    try {
+
+      // 서버에 토큰 전달하여 사용자 확인
+      const token = localStorage.getItem('accessToken');
+      const response = await axios.post(
+        'https://family-travel-photo-site.onrender.com/apis/post/signature',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+
       console.log('Signature 응답:', response.data);
       return response.data;
     } catch (error) {
@@ -31,65 +47,108 @@ function PostModal({ isOpen, onClose, placeName, placeAddress }) {
     }
   };
 
-  // 서명 받아와서 업로드하는 로직
+  // Cloudinary Signature 받아와서 업로드하는 로직
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    // 사진이 없으면 진행 막기
+    if(imageFiles.length === 0) {
+      alert('최소 1장 이상의 사진을 선택해주세요.');
+      return;
+    }
+
+    if (isUploading) return; // 이미 업로드 중이면 중단
+    setIsUploading(true); // 로딩 시작
 
     try {
+
+      // Cloudinary 환경 변수 받아오기
+      const cloud_name = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+      const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+
       // 1. 서명 요청하여 받아오기
-      const { signature, timestamp, cloudName, apiKey, folder } = await getCloudinarySignature();
+      const { signature, timestamp, folder } = await getCloudinarySignature();
 
       // 2. 여러 장의 사진을 동시에 Cloudinary로 업로드
-      const uploadPromises = imageFiles.map(async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('signature', signature); // 서명
-        formData.append('timestamp', timestamp); // 유효기간
-        formData.append('api_key', apiKey); // api키
-        formData.append('folder', folder); // 폴더 이름
+      // 이후 URL 배열 생성
+      const imageUrls = await Promise.all(
+        imageFiles.map(async (file) => {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('signature', signature); // 서명
+          formData.append('timestamp', timestamp); // 유효기간
+          formData.append('folder', folder); // 폴더 이름
+          formData.append('api_key', api_key); // api키
 
-        const res = await axios.post(
-          `https://api.cloudinary.com/v1_1${cloudName}/image/upload`,
-          formData
-        );
-        return res.data.secure_url; // 업로드된 이미지 url 반환 (서버에 전달 위해 필요)
-      });
-
-      const imageUrls = await Promise.all(uploadPromises);
+          const uploadRespond = await axios.post(
+            `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+            formData
+          );
+          
+          return uploadRespond.data.secure_url; // 업로드된 이미지 url 반환 (서버에 전달 위해 필요)
+      })
+    );
 
     // 3. 최종 데이터를 서버에 전송
     const postData = {
       placeName,
       placeAddress,
       content: event.target.content.value,
-      images: imageUrls, // [url1, url2, ...] 과 같은 배열 형태
+      imageUrls: imageUrls, // [url1, url2, ...] 과 같은 배열 형태
+      latitude: lat,
+      longitude: lng
     };
 
-    await axios.post('https://family-travel-photo-site.onrender.com/apis/post', postData);
+    await axios.post('https://family-travel-photo-site.onrender.com/apis/post', 
+      postData,
+      { 
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
     alert('성공적으로 저장되었습니다!');
     onClose();
 
   } catch (error) {
     alert('업로드 중 오류가 발생했습니다.');
+  } finally {
+    setIsUploading(false);
   }
 };
 
   // 파일 입력 변경 시 실행될 핸들러
   const handleImageChange = (event) => {
-    const files = event.target.files;
-    if (files) {
-      // 최대 10개까지만 선택 가능
-      const selectedFiles = Array.from(files).slice(0, 10);
-      setImageFiles(selectedFiles); // 파일 객체 저장
-      
-      // 선택된 파일들의 URL을 생성하여 상태에 저장 (미리보기용)
-      const previewUrls = selectedFiles.map(file => URL.createObjectURL(file));
-      imagePreviews.forEach(url => {
-        URL.revokeObjectURL(URL);
-      })
-      setImagePreviews(previewUrls);
-    }
-  };
+  const files = event.target.files;
+  if(!files) return;
+
+  const selectedFiles = Array.from(files);
+
+  // 1. 이미지가 아닌 파일 선택 제한
+  const isAllImages = selectedFiles.every(file => file.type.startsWith('image/'));
+  if(!isAllImages) {
+    alert('이미지 파일만 업로드 가능합니다.');
+    event.target.value = null;
+    return;
+  }
+
+  // 2. 이미지 개수 제약
+  if(selectedFiles.length > 10) {
+    alert('이미지는 최대 10장까지 업로드할 수 있습니다.');
+    selectedFiles = selectedFiles.slice(0, 10);
+  }
+
+  // 미리보기 상태 업데이트
+  setImageFiles(selectedFiles);
+
+  const previewUrls = selectedFiles.map(file => URL.createObjectURL(file));
+
+  // 메모리 해제 (기존 URL 정리)
+  imagePreviews.forEach(url => URL.revokeObjectURL(url));
+  setImagePreviews(previewUrls);
+
+  event.target.value = null;
+};
 
   // Modal이 열려있지 않으면 렌더링하지 않음
   if (!isOpen) return null;
@@ -178,8 +237,9 @@ function PostModal({ isOpen, onClose, placeName, placeAddress }) {
             <button 
               type="submit"
               className="submit-btn"
+              disabled={isUploading}
             >
-              저장하기
+              {isUploading ? '업로드 중...' : '저장하기'}
             </button>
           </div>
         </form>

@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
                 { uid: userData.user_id, login_id: userData.login_id},
                 process.env.JWT_SECRET,
                 { expiresIn: '1h' }
-            )
+            );
             return res.status(200).json({
                 success: true,
                 message: '성공적으로 로그인되었습니다.',

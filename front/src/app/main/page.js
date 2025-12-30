@@ -5,7 +5,7 @@ import PostModal from "../components/PostModal";
 
 export default function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState({ name: '', address: '' });
+  const [selectedPlace, setSelectedPlace] = useState({ name: '', address: '', lat: null, lng: null});
 
   useEffect(() => {
     // 카카오맵 스크립트가 로드되지 않았다면 함수를 종료
@@ -85,7 +85,16 @@ export default function Main() {
         // 4.2. 오버레이 컨텐츠 실제 생성
         window.kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
           const latlng = mouseEvent.latLng; // 마우스 클릭한 곳의 좌표 저장 변수
+
+          // 확인용
           console.log(latlng);
+
+          // PostModal 모달창에 좌표 전달하기 위한 변수
+          const lat = latlng.getLat();
+          const lng = latlng.getLng();
+
+          // 얻은 좌표만 미리 넣어두기
+          setSelectedPlace(prev => ({...prev, lat, lng,}));
 
           // 장소 검색(Places객체)에 사용할 옵션 설정
           let placeOptions = {
@@ -166,7 +175,7 @@ export default function Main() {
           }
 
           console.log(`위치 저장 : ${placeName}, ${placeAddress}`);
-          setSelectedPlace({ name: placeName, address: placeAddress });
+          setSelectedPlace({...prev, name: placeName, address: placeAddress});
           setIsModalOpen(true);
         };
 
@@ -186,6 +195,12 @@ export default function Main() {
 
     onLoadKakaoMap();
     console.log("kakao 지도 출력");
+    
+    return () => {
+      delete window.saveLocation;
+      delete window.closeOverlay;
+    }
+
   }, []); // 의존성 배열이 비어 있으므로 최초 1회만 실행
 
   return (
@@ -195,6 +210,8 @@ export default function Main() {
         onClose={() => setIsModalOpen(false)} 
         placeName={selectedPlace.name}
         placeAddress={selectedPlace.address}
+        lat={selectedPlace.lat}
+        lng={selectedPlace.lng}
       />
       <div id="map" className="w-full h-full"> {/* 지도를 표시할 div */}
         <div id="keyword">
@@ -204,9 +221,6 @@ export default function Main() {
   );
 }
 
-/*
-- 마커 오버레이 x 버튼 눌러서 닫을 시, 다음 좌표 클릭에 오버레이 생성 안되는 문제 수정 필요
-*/
 
 /*
 카카오지도 API를 이용해서 지도에 마커를 찍고 싶어.
