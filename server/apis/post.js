@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
     const { placeName, placeAddress, content, imageUrls, latitude, longitude } = req.body;
 
     // 2-1. 필수 입력값 검증
-    if (!user_id || !content) {
+    if (!user_id || !content || content.trim().length === 0) {
       return res.status(400).json({
         success: false,
         message: '필수 입력값이 누락되었습니다'

@@ -56,9 +56,16 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     
-    // 사진이 없으면 진행 막기
+    // 사진이 없으면 업로드 중지
     if(imageFiles.length === 0) {
       alert('최소 1장 이상의 사진을 선택해주세요.');
+      return;
+    }
+
+    // 내용이 없으면 업로드 중지
+    const contentValue = event.target.content.value;
+    if(!contentValue || !contentValue.trim()) {
+      alert("내용을 입력해주세요.");
       return;
     }
 
