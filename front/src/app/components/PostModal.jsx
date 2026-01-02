@@ -70,6 +70,7 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
       // Cloudinary 환경 변수 받아오기
       const cloud_name = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
       const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+      console.log("Cloud Name:", cloud_name);
 
       // 1. 토큰 보내고 서명 요청하여 받아오기
       const token = localStorage.getItem("accessToken");
@@ -81,10 +82,10 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
         imageFiles.map(async (file) => {
           const formData = new FormData();
           formData.append('file', file);
-          formData.append('signature', signature); // 서명
-          formData.append('timestamp', timestamp); // 유효기간
-          formData.append('folder', folder); // 폴더 이름
           formData.append('api_key', api_key); // api키
+          formData.append('timestamp', timestamp); // 유효기간
+          formData.append('signature', signature); // 서명
+          formData.append('folder', folder); // 폴더 이름
 
           const uploadRespond = await axios.post(
             `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
@@ -113,7 +114,7 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
         }
       }
     );
-    alert('성공적으로 저장되었습니다!');
+    alert('게시글이 성공적으로 저장되었습니다!');
     onClose();
 
   } catch (error) {
@@ -128,7 +129,7 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
   const files = event.target.files;
   if(!files) return;
 
-  const selectedFiles = Array.from(files);
+  let selectedFiles = Array.from(files);
 
   // 1. 이미지가 아닌 파일 선택 제한
   const isAllImages = selectedFiles.every(file => file.type.startsWith('image/'));
@@ -214,9 +215,7 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
                     className="image-preview"
                   />
                 ))}
-                {imagePreviews.length > 5 && (
-                  <p className="image-limit-notice">미리보기는 최대 5개까지만 표시됩니다. <br /> (총 {imagePreviews.length}/10개 선택됨)</p>
-                )}
+                <p className="image-limit-notice">미리보기는 최대 5개까지만 표시됩니다. <br /> (총 {imagePreviews.length}/10개 선택됨)</p>
               </div>
             )}
           </div>

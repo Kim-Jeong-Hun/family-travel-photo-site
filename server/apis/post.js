@@ -94,6 +94,7 @@ router.post('/', async (req, res) => {
 
     // 2-2. Supabase의 posts(post_id, user_id, content, created_at, latitude, longitude, place_name)
     // 에 포스트 저장
+    // post_id 컬럼은 PK, auto_increment 컬럼이므로 제외
     const { data: postData, error: postError } = await supabase
       .from('posts')
       .insert([
@@ -116,6 +117,7 @@ router.post('/', async (req, res) => {
 
     // 이미지 배열을 DB 형식에 맞게 변환
     // supabase의 .insert() 메소드는 인자를 배열 형식으로 받음
+    // image_id 컬럼은 PK, auto_increment이므로 제외
     const imageInserts = imageUrls.map((url, index) => ({
       post_id: post_id,
       image_url: url,
