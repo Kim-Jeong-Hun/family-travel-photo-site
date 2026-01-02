@@ -1,6 +1,8 @@
 import React from 'react';
 
 function Settings_page() {
+    
+
     return (
         <>
             설정 페이지
