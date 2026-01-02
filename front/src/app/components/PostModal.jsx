@@ -71,7 +71,8 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
       const cloud_name = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
       const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
 
-      // 1. 서명 요청하여 받아오기
+      // 1. 토큰 보내고 서명 요청하여 받아오기
+      const token = localStorage.getItem("accessToken");
       const { signature, timestamp, folder } = await getCloudinarySignature(token);
 
       // 2. 여러 장의 사진을 동시에 Cloudinary로 업로드

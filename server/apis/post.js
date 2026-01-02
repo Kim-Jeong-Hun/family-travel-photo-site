@@ -31,7 +31,7 @@ router.post('/signature', async (req, res) => {
 
     // 폴더 이름을 user_id와 login_id를 이용해 동적으로 만들기
     const timestamp = Math.floor(Date.now() / 1000);
-    const folder  = `photos/${user_id}|${login_id}`;
+    const folder  = `photos/${user_id}_${login_id}`;
 
     // cloudinary SDK에서 제공하는 서명 객체 생성 함수 사용
     const signature = cloudinary.utils.api_sign_request(
