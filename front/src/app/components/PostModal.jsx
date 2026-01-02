@@ -118,6 +118,12 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
     onClose();
 
   } catch (error) {
+    // 토큰 만료시, 로그인 페이지로 리다이렉트하는 로직 추가
+    if(error.response?.status == 401) {
+      alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
+      localStorage.removeItem('accessToken');
+      window.location.href = '/login';
+    }
     alert('업로드 중 오류가 발생했습니다.');
   } finally {
     setIsUploading(false);

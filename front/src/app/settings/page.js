@@ -1,11 +1,11 @@
-import React from 'react';
+import { useState } from 'react';
 
 function Settings_page() {
     
-
     return (
         <>
-            설정 페이지
+            <input type="radio"></input>
+            <input type="submit">저장하기</input>
         </>
     );
 }
