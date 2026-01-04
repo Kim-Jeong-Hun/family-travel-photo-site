@@ -20,7 +20,7 @@ router.post('/signature', async (req, res) => {
     }
 
     //Bearer와 token 구조 분해 할당
-    const [scheme, token] = req.headers.authorization.split(' ');
+    const [scheme, token] = authHeader.split(' ');
     if(scheme !== 'Bearer') return res.status(401);
 
     // JWT 검증

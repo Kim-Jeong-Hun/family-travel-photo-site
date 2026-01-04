@@ -17,9 +17,11 @@ app.use(express.json());
 const signupRouter = require('./apis/signup.js');
 const loginRouter = require('./apis/login.js');
 const postRouter = require('./apis/post.js');
+const myPageRouter = require('./apis/myPage.js');
 app.use('/apis/signup', signupRouter);
 app.use('/apis/login', loginRouter);
 app.use('/apis/post', postRouter);
+app.use('/apis/myPage', postRouter);
 
 app.get('/', (req, res) => {
 res.json({
