@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const supabase = require("../supabase_setting"); // supabase 설정 불러오기
 
-router.post("/profile", async (req, res) => {
+router.get("/profile", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -33,7 +33,7 @@ router.post("/profile", async (req, res) => {
     });
   } catch (error) {
     console.log("Profile API Error: ", error.message);
-    
+
     // 토큰 만료 및 유효하지 않은 토큰 처리
     if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
       return res.status(401).json({ success: false, message: "유효하지 않은 토큰입니다." });

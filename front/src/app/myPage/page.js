@@ -12,19 +12,18 @@ function My_page() {
     if (!token) return;
 
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         "https://family-travel-photo-site.onrender.com/apis/myPage/profile",
-        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      
+
       const nickname = response.data.nickname;
       if (nickname) {
-        setIsUser();
+        setIsUser(nickname);
       }
     } catch (error) {
       console.log("error: ", error);

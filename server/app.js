@@ -21,7 +21,7 @@ const myPageRouter = require('./apis/myPage.js');
 app.use('/apis/signup', signupRouter);
 app.use('/apis/login', loginRouter);
 app.use('/apis/post', postRouter);
-app.use('/apis/myPage', postRouter);
+app.use('/apis/myPage', myPageRouter);
 
 app.get('/', (req, res) => {
 res.json({
