@@ -86,3 +86,4 @@ export default Settings_page;
 
 
 // 반응형 웹디자인 적용 안되는 이유 찾기
+// 다크 테마 추가하기 (tailwindcss 기능)
