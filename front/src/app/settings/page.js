@@ -16,12 +16,12 @@ function Settings_page() {
             <div className="flex justify-around gap-[40px] lg:gap-[300px]">
               <div className="flex flex-col items-center">
                 <img
-                  src="/images/basic_theme.png"
-                  alt="기본 테마"
+                  src="/images/light_theme.png"
+                  alt="라이트 테마"
                   className="mb-[20px]"
                 />
                 <label htmlFor="basic" className="mb-[5px]">
-                  기본
+                  라이트
                 </label>
                 <input
                   type="radio"

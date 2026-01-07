@@ -9,7 +9,7 @@ export default function MyPageLayout({ children }) {
       <div className="w-full h-[12.4%] border-b border-[#D9D9D9] rounded-b-2xl">
         <MainUpperPart />
       </div>
-      <div className="flex flex-col justify-center items-center w-full h-[87.5%] bg-[#F2E3BF]">
+      <div className="flex flex-col justify-center items-center w-full h-[87.5%] bg-[#FFFFFF]">
         {children}
       </div>
     </main>
