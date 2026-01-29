@@ -34,7 +34,7 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
   const getCloudinarySignature = async (token) => {
     try {
       // 서버에 토큰 전달하여 사용자 확인
-      const response = await axios.post(
+      const response = await axios.get(
         'https://family-travel-photo-site.onrender.com/apis/post/signature',
         {},
         {

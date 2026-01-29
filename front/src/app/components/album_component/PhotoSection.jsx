@@ -1,9 +1,11 @@
-function PhotoSection() {
-    return (
-        <div>
+"use client";
 
-        </div>
-    );
+import { useState, useEffect } from "react";
+
+function PhotoSection() {
+  return (
+    <></>
+  );
 }
 
 export default PhotoSection;

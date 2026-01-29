@@ -35,12 +35,19 @@ router.get("/profile", async (req, res) => {
     console.log("Profile API Error: ", error.message);
 
     // 토큰 만료 및 유효하지 않은 토큰 처리
-    if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
-      return res.status(401).json({ success: false, message: "유효하지 않은 토큰입니다." });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return res
+        .status(401)
+        .json({ success: false, message: "유효하지 않은 토큰입니다." });
     }
 
     // 서버 내부 에러
-    return res.status(500).json({ success: false, message: "서버 오류가 발생했습니다." });
+    return res
+      .status(500)
+      .json({ success: false, message: "서버 오류가 발생했습니다." });
   }
 });
 

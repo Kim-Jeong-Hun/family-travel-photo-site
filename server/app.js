@@ -13,15 +13,17 @@ app.use(cors({
 // 프론트와의 데이터 통신용
 app.use(express.json());
 
-// 라우터 등록 & 사용
+// API 라우터 등록 & 사용
 const signupRouter = require('./apis/signup.js');
 const loginRouter = require('./apis/login.js');
 const postRouter = require('./apis/post.js');
 const myPageRouter = require('./apis/myPage.js');
+const albumRouter = require('./apis/album.js');
 app.use('/apis/signup', signupRouter);
 app.use('/apis/login', loginRouter);
 app.use('/apis/post', postRouter);
 app.use('/apis/myPage', myPageRouter);
+app.use('/apis/album', albumRouter);
 
 app.get('/', (req, res) => {
 res.json({

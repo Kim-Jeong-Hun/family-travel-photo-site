@@ -32,7 +32,7 @@ function LoginButton() {
                 type="button"
                 onClick={handleClick}
                 value={isLoggedIn ? '로그아웃' : '로그인'}
-                className="absolute right-[25px] text-center w-[100px] h-[40px] bg-[#ffe500] border-solid rounded-[30px] text-[16px] font-bold text-black cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#ffdd00]"
+                className="text-center w-[100px] h-[40px] bg-[#ffe500] border-solid rounded-[30px] text-[16px] font-bold text-black cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#ffdd00]"
               />
         </>
     );

@@ -9,7 +9,7 @@ export default function AlbumLayout({ children }) {
       <div className="w-full h-[12.4%] border-b border-[#D9D9D9] rounded-b-2xl">
         <MainUpperPart />
       </div>
-      <div className="flex flex-col justify-center items-center w-full h-[87.5%] bg-[#FFFFFF]">
+      <div className="w-full flex flex-col flex-grow items-center justify-center bg-[#FFFFFF]">
         {children}
       </div>
     </main>

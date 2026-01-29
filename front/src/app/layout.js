@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/next';
+import QueryProvider from './components/QueryProvider';
 import './styles/globals.css';
 
 /*
@@ -17,8 +18,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang='ko'>
       <body>
-        {children}
-        <Analytics />
+        <QueryProvider>
+          {children}
+          <Analytics />
+        </QueryProvider>
       </body>
     </html>
   );
