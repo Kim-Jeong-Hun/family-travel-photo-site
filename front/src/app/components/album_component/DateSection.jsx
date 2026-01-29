@@ -12,7 +12,7 @@ import axios from 'axios';
 // 1. 토큰 서버에 전달하고 날짜 목록 가져올 함수 작성 (queryFn)
 const getUploadDates = async () => {
   const token = localStorage.getItem("accessToken");
-  const response = await axios.get("https://family-travel-photo-site.onrender.com/album/individual/dates", {
+  const response = await axios.get("https://family-travel-photo-site.onrender.com/apis/album/individual/dates", {
     headers : {
       Authorization : `Bearer ${token}`
     }
