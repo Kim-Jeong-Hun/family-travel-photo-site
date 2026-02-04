@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import "@/app/styles/IntroAnimation.css"; // CSS 파일 추가
 import Image from "next/image";
+import "@/app/styles/IntroAnimation.css"; // CSS 파일 추가
 
 export default function IntroAnimation() {
   const [currentIndex, setCurrentIndex] = useState(0);
