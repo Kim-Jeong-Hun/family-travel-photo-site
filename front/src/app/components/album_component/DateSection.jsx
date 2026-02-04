@@ -12,41 +12,54 @@ import axios from 'axios';
 // 1. 토큰 서버에 전달하고 날짜 목록 가져올 함수 작성 (queryFn)
 const getUploadDates = async () => {
   const token = localStorage.getItem("accessToken");
-  const response = await axios.get("https://family-travel-photo-site.onrender.com/apis/album/individual/dates", {
-    headers : {
-      Authorization : `Bearer ${token}`
+  try {
+    const response = await axios.get("https://family-travel-photo-site.onrender.com/apis/album/individual/dates", {
+      headers : {
+        Authorization : `Bearer ${token}`
+      }
+    });
+    console.log("Response:", response.data);
+    
+    // success가 false면 에러
+    if (!response.data.success) {
+      throw new Error(response.data.message || "날짜 조회 실패");
     }
-  });
-  return response.data.uniqueDatesdata;
+    
+    // 서버에서 response.json({data})로 데이터 받아옴
+    return response.data.data; 
+  } catch (error) {
+    console.error("getUploadDates Error:", error);
+    throw error;
+  }
 }
 
 function DateSection({ onSelect }) {
   // 2. TanStack Query로 데이터 패칭
-  // 가져온 데이터 형식 : 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['dateList'],
+  const { data } = useQuery({
+    queryKey: ['dateList'], 
     queryFn: getUploadDates,
+    staleTime: Infinity,  // 데이터를 항상 fresh 상태로 유지하여 자동 refetch 방지
+    gcTime: Infinity,     // 가비지 컬렉션 비활성화
   });
 
-  // 로딩 중일 때 처리
-  if (isLoading) return <div>날짜 목록을 불러오는 중...</div>;
-  // 에러 발생 시 처리
-  if (isError) return <div className="text-[#EE0000]">날짜를 불러오지 못했습니다.</div>;
-
   return (
-    <div>
+    <div className="my-[20px]">
       <select 
-        name="date"
+        // appearance-none : select 태그에 적용된 브라우저 기본 스타일 제거
+        className="appearance-none w-[100px] h-[30px] border-solid border-[2px] font-[700] text-center"
         onChange={(e) => onSelect(e.target.value)}>
         <option>날짜 선택</option>
-        {data?.map((date) => (
-          <option key={date} value={date}>
-            {date}
-          </option>
-        ))}
+          {data?.map((date) => (
+            <option key={date} value={date}>
+              {date}
+            </option>
+          ))}
       </select>
     </div>
   );
 }
 
 export default DateSection;
+
+
+// tailwindcss의 lg 브레이크 포인트가 제대로 작동하지 않는 문제

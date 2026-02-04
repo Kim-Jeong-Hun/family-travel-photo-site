@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import "@/app/styles/IntroAnimation.css"; // CSS 파일 추가
+import Image from "next/image";
 
 export default function IntroAnimation() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -9,7 +10,7 @@ export default function IntroAnimation() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % 3); // 0, 1, 2 반복
-    }, 2000); // 1초 Fade-in + 1초 Fade-out
+    }, 2000); // 2초 : 1초 Fade-in + 1초 Fade-out
 
     return () => clearInterval(interval); // 컴포넌트 언마운트 시 타이머 정리
   }, []);
@@ -24,7 +25,7 @@ export default function IntroAnimation() {
     <div className="intro-background">
       <div className="animation-container">
         {images.map((src, index) => (
-          <img
+          <Image
             key={index}
             src={src}
             alt={`icon-${index}`}

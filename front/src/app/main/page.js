@@ -43,7 +43,7 @@ export default function Main() {
         let geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 객체
         let places = new window.kakao.maps.services.Places(); // Places 객체
 
-        // 동적 콘텐츠 생성 함수 - TailwindCSS는 정적으로만 동작하므로 바닐라 CSS로 구현
+        // 동적 콘텐츠 생성 함수
         const createContent = (placeName, placePhone, placeCategory, placeAddress) => `
   <div style="width: 300px; text-align: left; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; font-size: 14px; line-height: 1.5;">
     <div style="position: relative; background-color: rgb(255, 255, 255); border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid rgb(209, 213, 219); overflow: hidden;">      

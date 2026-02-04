@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from 'next/link';
 import axios from 'axios';
+import Image from 'next/image';
 
 function LoginForm() {
   const [id, setId] = useState(''); // 사용자 아이디
