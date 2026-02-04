@@ -26,6 +26,7 @@ export default function IntroAnimation() {
       <div className="animation-container">
         {images.map((src, index) => (
           <Image
+            fill={true}
             key={index}
             src={src}
             alt={`icon-${index}`}
