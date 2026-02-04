@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link'; // next.js의 Link 사용하여 SPA 방식으로 개선
+import Image from 'next/image';
 import "../styles/Sidebar.css";
 
 function Sidebar({ isOpen }) {
@@ -20,7 +21,9 @@ function Sidebar({ isOpen }) {
         </li>
       </ul>
       <div className="sidebar_footer">
-        <img
+        <Image
+          width={141}
+          height={141}
           src="/images/sidebar-logo.png"
           alt="우리 가족의 이야기가 시작되는 곳"
           className="sidebar_image"
