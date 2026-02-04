@@ -1,7 +1,4 @@
-/*절대 지우지 말 것*/
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 html,
 body {
