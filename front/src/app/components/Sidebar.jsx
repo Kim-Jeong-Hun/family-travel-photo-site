@@ -30,21 +30,28 @@ function Sidebar({ isOpen }) {
         />
         <br />
         <p>© 2025 여기담다. All rights reserved.</p>
-        <p>
-          Developer :{" "}
-          <a href="https://github.com/Kim-Jeong-Hun" target="_blank" rel="noopener noreferrer">
-            <img src="/images/github.svg" alt="GitHub" />
-          </a>{" "}
-          |{" "}
-          <img
-            src="/images/envelope.svg"
-            alt="Email"
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              alert("kimjeonghun213@gmail.com");
-            }}
-          />
-        </p>
+        <p>Developer : {" "}
+          <a href="https://github.com/Kim-Jeong-Hun" target="_blank" rel="noreferrer">
+            <Image
+              width={20}
+              height={20} 
+              src="/images/github.svg"
+              style={{ cursor: 'pointer', display: 'inline-block' }} // 인라인 블록으로 지정하여 "Developer : "와 같은 라인으로 설정 
+              alt="GitHub" 
+            />
+          </a>
+           <span> | </span> 
+            <Image
+              width={20}
+              height={20}
+              src="/images/envelope.svg"
+              style={{ cursor: 'pointer', display: 'inline-block' }} // 인라인 블록으로 지정하여 "Developer : "와 같은 라인으로 설정
+              onClick={() => {
+                alert("개발자 이메일 : kimjeonghun213@gmail.com");
+              }}
+              alt="Email"
+            />
+          </p>
       </div>
     </div>
   );

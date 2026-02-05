@@ -1,7 +1,6 @@
 /*
 main 페이지의 마커의 "이 장소 저장하기" 버튼 클릭 시
 사진 여러 장과 내용을 입력할 수 있는 모달 창 구현하는 것이 목표
-모달 창은 동적으로 나타날 것이므로 .css 파일 만들어 사용
 */
 
 /*
@@ -12,6 +11,7 @@ axios로 서버에 요청을 보내어 서명 받아온 후(getCloudinarySignatu
 
 "use client";
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import axios from 'axios';
 import '../styles/PostModal.css';
 
@@ -221,10 +221,13 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
             {imagePreviews.length > 0 && (
               <div className="image-preview-container">
                 {imagePreviews.slice(0, 5).map((preview, index) => (
-                  <img 
+                  <Image
+                    width={64}
+                    height={64}
                     key={index}
                     src={preview} 
-                    alt={`선택한 이미지 미리보기 ${index + 1}`} 
+                    alt={`선택한 이미지 미리보기 ${index + 1}`}
+                    style={{ display: 'inline-block', marginRight: '5px'}}
                     className="image-preview"
                   />
                 ))}

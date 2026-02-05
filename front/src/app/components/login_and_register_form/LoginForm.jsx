@@ -43,13 +43,24 @@ function LoginForm() {
 
 
   return (
-      <div className="h-screen w-full bg-[url('/images/login-bg.jpg')] bg-cover bg-center opacity-80 flex items-center justify-center">
-        <div className="p-8 mb-[5%] w-[75%] max-w-sm h-[80%] text-center">
-          <div>
-            <img
+      <div className="h-screen w-full opacity-80 flex items-center justify-center">
+        <Image 
+          fill
+          style={{ objectFit: 'cover' }}
+          src="/images/login-bg.jpg"
+          alt="가족 여행 사진 배경"
+          className="-z-10"
+          />
+        <div className="p-8 mb-[5%] w-[75%] h-[80%] lg:w-2xl text-center">
+          <div className="max-w-md mx-auto">
+            <Image
+              width={260} // 이미지 원본 width
+              height={260} // 이미지 원본 height
+              quality={100}
+              priority
               src="/images/login-logo.png"
               alt="여기담다"
-              className="w-20 mx-auto"
+              className="w-full h-auto block mx-auto"
             />
           </div>
 
@@ -74,11 +85,11 @@ function LoginForm() {
                 required
               />
               <div>
-                <Link href="/signup" className="underline text-[#FFF]">
+                <Link href="/signup" className="underline text-white font-bold">
                   회원가입
                 </Link>
                 <a className="text-[#FFF]"> / </a>
-                <Link href="/change-password" className="underline text-[#FFF]">
+                <Link href="/change-password" className="underline text-white font-bold">
                   비밀번호 변경
                 </Link>
               </div>

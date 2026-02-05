@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from 'next/link';
+import Image from 'next/image';
 import axios from 'axios'; // HTTP 요청을 위한 라이브러리 - 백엔드 API와 통신
 import { useRouter } from 'next/navigation'; // Next.js 라우팅을 위한 훅
 
@@ -65,10 +66,17 @@ function RegisterForm1() {
     };
 
     return (
-      <div className="h-screen w-full bg-[url('/images/login-bg.jpg')] bg-cover bg-center opacity-80 flex items-center justify-center">
-        <div className="p-8 mb-[5%] w-[75%] max-w-sm h-[80%] text-center">
+      <div className="h-screen w-full opacity-80 flex items-center justify-center">
+        <Image 
+          fill
+          style={{ objectFit: 'cover' }}
+          src="/images/login-bg.jpg"
+          alt="가족 여행 사진 배경"
+          className="-z-10"
+          />
+        <div className="p-8 mb-[5%] w-[75%] h-[80%] text-center">
           {/* 회원가입 페이지 제목 */}
-          <h2 className="mt-[10%] text-center">
+          <h2 className="mt-[10%] font-bold text-lg lg:text-2xl">
             <u>회원가입</u>
           </h2>
           
@@ -149,7 +157,7 @@ function RegisterForm1() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="사용하실 비밀번호를 입력해 주세요."
-                className="w-[280px] h-[40px] mb-[20px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
+                className="w-[280px] h-[40px] mb-2 lg:mb-[15px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
               />
               
               {/* ===== 비밀번호 확인 입력 필드 ===== */}
@@ -168,12 +176,12 @@ function RegisterForm1() {
                 type="submit"
                 value={loading ? "처리 중..." : "회원가입"}
                 disabled={loading}
-                className="mb-[10px] mt-[40px] w-[280px] h-[45px] bg-[#ffe500] border-none rounded-[30px] text-[16px] font-bold text-black cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#ffdd00] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mb-[10px] mt-5 lg:mt-[30px] w-[280px] h-[45px] bg-[#ffe500] border-none rounded-[30px] text-[16px] font-bold text-black cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#ffdd00] disabled:opacity-50 disabled:cursor-not-allowed"
               />
               
               {/* ===== 로그인 페이지 링크 ===== */}
               <div>
-                <Link href="/login" className="underline text-[#FFF]">
+                <Link href="/login" className="underline text-[#FFF] font-bold">
                   로그인하기
                 </Link>
               </div>
