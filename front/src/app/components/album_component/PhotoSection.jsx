@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 
-function PhotoSection() {
+function PhotoSection(imageUrls, content) {
   return (
-    <div className="mb-[15px]"></div>
+    <div className="mb-[15px]">
+
+    </div>
   );
 }
 

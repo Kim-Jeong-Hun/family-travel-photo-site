@@ -25,7 +25,7 @@ function Album_page() {
     <div>
       <DateSection onSelect={setSelectedDate} />
       <ContentSection selectedDate={selectedDate}>
-        <TextSection selectedDate={selectedDate}/>
+        <TextSection />
         <PhotoSection />
       </ContentSection>
       <PhotoModal />

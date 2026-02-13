@@ -51,7 +51,7 @@ function LoginForm() {
           alt="가족 여행 사진 배경"
           className="-z-10"
           />
-        <div className="p-8 mb-[5%] w-[75%] h-[80%] lg:w-2xl text-center">
+        <div className="p-8 mb-[5%] w-[75%] h-[80%] lg:w-2xl lg:h-screen text-center">
           <div className="max-w-md mx-auto">
             <Image
               width={260} // 이미지 원본 width

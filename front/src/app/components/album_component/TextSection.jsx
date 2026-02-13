@@ -6,13 +6,13 @@
 
 function TextSection({ selectedDate, placeName, placeAddress }) {
   return (
-    <div className="mt-[15px]">
+    <div className="">
       <p>
         <span className="text-left text-[20px] font-[700]">
           {selectedDate}
         </span>
         {selectedDate && placeName && <span className="text-[20px]"> | </span>}
-        <span className="text-[15px] font-[500]">{placeName}</span>
+        <span className="text-[15px] font-bold">{placeName}</span>
       </p>
       <p>
         <span className="text-[13px] text-[#9A9A9A]">
