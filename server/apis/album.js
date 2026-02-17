@@ -8,6 +8,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const supabase = require("../supabase_setting.js"); // supabase 설정 불러오기
+const cloudinary = require('../cloudinary_setting'); // cloudinary 설정 불러오기
 
 // "내 앨범" 페이지의 DateSection용 (저장된 게시글 날짜 가져오는 api)
 router.get("/individual/dates", async (req, res) => {
@@ -103,11 +104,14 @@ router.get("/individual/posts", async (req, res) => {
       console.log("count :", count);
     
     if (error) throw error;
+
     return res.status(200).json({
       success: true,
       post: data[0],
       totalCount: count // 전체 게시글 수 전달
     })
+
+
 
   } catch (error) {
     console.error("에러 발생: ", error);

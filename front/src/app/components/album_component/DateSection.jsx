@@ -44,9 +44,9 @@ function DateSection({ onSelect }) {
 
   return (
     <div>
-      <select 
+      <select
         // appearance-none : select 태그에 적용된 브라우저 기본 스타일 제거
-        className="appearance-none w-[100px] h-[30px] border-solid border-[2px] font-[700] text-center my-5"
+        className="appearance-none w-[100px] h-[30px] border-solid border-[2px] font-[700] text-center"
         onChange={(e) => onSelect(e.target.value)}>
         <option>날짜 선택</option>
           {data?.map((date) => (

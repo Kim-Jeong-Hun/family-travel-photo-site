@@ -61,14 +61,17 @@ function ContentSection({ selectedDate }) {
       {post && (
         <>
           <hr className="border-[#B3B3B3] border-dashed" />
+          <br />
           <div>
             <TextSection
               selectedDate={selectedDate}
               placeName={post.place_name}
               placeAddress={post.place_address}
             />
+            <br />
             <PhotoSection imageUrls={post.post_images} content={post.content} />
           </div>
+          <br />
           <hr className="border-[#B3B3B3] border-dashed " />
         </>
       )}
@@ -102,3 +105,23 @@ function ContentSection({ selectedDate }) {
 export default ContentSection;
 
 // 데이터가 패칭되면 위아래로 회색 점선 렌더링 (절취선 느낌)
+
+
+// 데이터 패칭 형식
+/*
+
+{
+  "success": true,
+  "post": {
+    "place_name": "성수동 카페",
+    "place_address": "서울 성동구 어쩌구로 123",
+    "content": "오늘 날씨가 너무 좋아서 사진 찍기 좋았어요!",
+    "post_images": [
+      { "image_url": "https://example.com/storage/v1/image1.jpg" },
+      { "image_url": "https://example.com/storage/v1/image2.jpg" }
+    ]
+  },
+  "totalCount": 15
+}
+
+*/

@@ -1,7 +1,7 @@
 /*
 <TextSection>
 - 상위 컴포넌트(ContentSection)로부터 
-날짜(selectedDate), 장소(placeName), 주소(placeAddress) 받아와서 렌더링 
+날짜(selectedDate), 장소(placeName), 주소(placeAddress) 받아와서 렌더링
 */
 
 function TextSection({ selectedDate, placeName, placeAddress }) {

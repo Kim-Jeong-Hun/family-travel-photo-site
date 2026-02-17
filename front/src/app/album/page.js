@@ -12,7 +12,6 @@
 
 import DateSection from "../components/album_component/DateSection";
 import ContentSection from "../components/album_component/ContentSection";
-import PhotoModal from "../components/album_component/PhotoModal";
 import TextSection from "../components/album_component/TextSection";
 import PhotoSection from "../components/album_component/PhotoSection";
 import { useState } from 'react';
@@ -23,12 +22,13 @@ function Album_page() {
 
   return (
     <div>
+      <br />
       <DateSection onSelect={setSelectedDate} />
+      <br />
       <ContentSection selectedDate={selectedDate}>
         <TextSection />
         <PhotoSection />
       </ContentSection>
-      <PhotoModal />
     </div>
   );
 }

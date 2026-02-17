@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const jwt = require('jsonwebtoken');
 const cloudinary = require('../cloudinary_setting'); // cloudinary 설정 불러오기
 const supabase = require('../supabase_setting'); // supabase 설정 불러오기
