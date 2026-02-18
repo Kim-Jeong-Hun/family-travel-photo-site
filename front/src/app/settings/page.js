@@ -1,5 +1,6 @@
 "use client";
-import { useState, React } from "react";
+
+import Image from 'next/image';
 
 function Settings_page() {
   const handleSubmit = (event) => {
@@ -15,7 +16,11 @@ function Settings_page() {
             <h3 className="mb-[20px] lg:mb-[40px]">테마</h3>
             <div className="flex justify-around gap-[40px] lg:gap-[300px]">
               <div className="flex flex-col items-center">
-                <img
+                {/* 라이트테마, 다크테마 원본 크기 : 66x66 */}
+                
+                <Image
+                  width={66}
+                  height={66}
                   src="/images/light_theme.png"
                   alt="라이트 테마"
                   className="mb-[20px]"
@@ -31,7 +36,9 @@ function Settings_page() {
                 />
               </div>
               <div className="flex flex-col items-center">
-                <img
+                <Image
+                  width={66}
+                  height={66}
                   src="/images/dark_theme.png"
                   alt="다크 테마"
                   className="mb-[20px]"

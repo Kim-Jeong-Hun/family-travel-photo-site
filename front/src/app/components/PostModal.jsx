@@ -58,7 +58,7 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
     
     // 사진이 없으면 업로드 중지
     if(imageFiles.length === 0) {
-      alert('최소 1장 이상의 사진을 선택해주세요.');
+      alert('최소 1장 이상의 사진을 선택해주세요.'); 
       return;
     }
 
@@ -181,8 +181,8 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
             새 글 작성
           </h2>
           <button
-            onClick={onClose}
             className="modal-close-btn"
+            onClick={onClose}
           >
             ✕
           </button>
@@ -202,12 +202,6 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
         <form onSubmit={handleSubmit} className="modal-form">
           {/* 사진 선택 폼 (File Input) */}
           <div className="form-group">
-            <label 
-              htmlFor="image" 
-              className="form-label"
-            >
-              커버 사진 (선택)
-            </label>
             <input 
               type="file" 
               id="image"
@@ -222,8 +216,8 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
               <div className="image-preview-container">
                 {imagePreviews.slice(0, 5).map((preview, index) => (
                   <Image
-                    width={64}
-                    height={64}
+                    width={32}
+                    height={32}
                     key={index}
                     src={preview} 
                     alt={`선택한 이미지 미리보기 ${index + 1}`}

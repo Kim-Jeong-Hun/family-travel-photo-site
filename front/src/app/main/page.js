@@ -38,6 +38,18 @@ export default function Main() {
         let marker = null; // 마커 변수
         let overlay = null; // 오버레이 변수
 
+        // 오버레이 닫기 함수를 전역으로 설정
+        window.closeOverlay = function() {
+          if (overlay) {
+            overlay.setMap(null);
+            overlay = null;
+          }
+          if (marker) {
+            marker.setMap(null);
+            marker = null;
+          }
+        }
+
         // 4. 좌표를 주소로 변환할 때 사용하는 Geocoder 객체, 
         // 건물명, 카테고리, 연락처가 필요할 때 사용하는 Places 객체 추가
         let geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 객체
@@ -183,17 +195,6 @@ export default function Main() {
           
         setIsModalOpen(true);
         
-        // 오버레이 닫기 함수를 전역으로 설정
-        window.closeOverlay = function() {
-          if (overlay) {
-            overlay.setMap(null);
-            overlay = null;
-          }
-          if (marker) {
-            marker.setMap(null);
-            marker = null;
-          }
-        }
       }});
     };
 
@@ -224,29 +225,3 @@ export default function Main() {
     </>
   );
 }
-
-
-/*
-카카오지도 API를 이용해서 지도에 마커를 찍고 싶어.
-근데 useEffect 안에 써도 괜찮을까?
-
-네, 카카오지도 API를 `useEffect` 안에서 사용하는 것은 **완벽하게 올바른 방법**입니다. 
-오히려 그렇게 사용하는 것이 React의 작동 방식에 맞는 **가장 정석적인 방법**입니다. 👍
-
-React 컴포넌트의 주된 역할은 UI를 렌더링하는 것입니다. 
-카카오지도 API처럼 외부 라이브러리를 사용해 DOM을 직접 조작하는 행위는 React의 입장에서는 'Side Effect(부수 효과)'에 해당합니다. 
-`useEffect`는 바로 이런 Side Effect를 처리하기 위해 만들어진 Hook입니다.
-
-### ## 왜 `useEffect`를 사용해야 할까요?
-
-1. **DOM 접근 시점**: 
-React는 렌더링이 끝난 후에야 실제 DOM이 생성됩니다. 
-`useEffect`는 렌더링이 완료된 후 실행되므로, 카카오 지도를 삽입할 `<div>`와 같은 DOM 요소에 안전하게 접근할 수 있습니다. 
-만약 `useEffect` 없이 컴포넌트 본문에 지도 생성 코드를 바로 넣으면, 
-해당 코드가 실행되는 시점에는 아직 DOM이 준비되지 않아 오류가 발생합니다.
-
-2. **불필요한 재실행 방지**: 
-`useEffect`의 의존성 배열(`[]`)을 비워두면, 컴포넌트가 처음 마운트될 때 **단 한 번만** 지도 생성 코드를 실행할 수 있습니다. 
-만약 이 코드가 컴포넌트 본문에 있다면, 
-컴포넌트가 리렌더링될 때마다 새로운 지도를 계속해서 생성하려고 시도하여 성능 문제를 일으키고 지도도 겹쳐서 보이게 됩니다.
-*/
