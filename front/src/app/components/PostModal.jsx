@@ -121,7 +121,12 @@ function PostModal({ isOpen, onClose, placeName, placeAddress, lat, lng }) {
       }
     );
     alert('게시글이 성공적으로 저장되었습니다!');
+
+    // 모달 상태 초기화
+    setImageFiles([]);
+    setImagePreviews([]);
     onClose();
+
 
   } catch (error) {
     // 토큰 만료시, 로그인 페이지로 리다이렉트하는 로직 추가
