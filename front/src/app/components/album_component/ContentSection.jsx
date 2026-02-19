@@ -76,9 +76,12 @@ function ContentSection({ selectedDate }) {
         </>
       )}
       <div className="flex flex-row justify-between items-center mt-[15px]">
-        <div className="w-[30px] text-center bg-[#D9D9D9]">
+        <div className="w-[30px] text-center bg-[#D9D9D9] h-[30px] flex items-center justify-center">
           {page > 1 && (
-            <div onClick={() => setPage(page - 1)} className="cursor-pointer">
+            <div 
+              onClick={() => setPage(page - 1)} 
+              className="cursor-pointer w-full font-bold"
+            >
               {"<"}
             </div>
           )}
@@ -91,13 +94,14 @@ function ContentSection({ selectedDate }) {
           {page < totalCount && (
             <div
               onClick={() => setPage(page + 1)}
-              className="cursor-pointer w-full"
+              className="cursor-pointer w-full font-bold"
             >
               {">"}
             </div>
           )}
         </div>
       </div>
+      <br />
     </div>
   );
 }
