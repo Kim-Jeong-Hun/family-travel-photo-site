@@ -10,7 +10,9 @@ import axios from "axios";
 // 게시글은 한 개씩만 가져오며, 다음 페이지 버튼 클릭 시 다음 게시글 정보 가져옴.
 const getPosts = async (selectedDate, page) => {
   const token = localStorage.getItem("accessToken");
-  const response = await axios.get("https://family-travel-photo-site.onrender.com/apis/album/individual/posts", {
+  const response = await axios.get(
+    "https://family-travel-photo-site.onrender.com/apis/album/individual/posts",
+    {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,8 +80,8 @@ function ContentSection({ selectedDate }) {
       <div className="flex flex-row justify-between items-center mt-[15px]">
         <div className="w-[30px] text-center bg-[#D9D9D9] h-[30px] flex items-center justify-center">
           {page > 1 && (
-            <div 
-              onClick={() => setPage(page - 1)} 
+            <div
+              onClick={() => setPage(page - 1)}
               className="cursor-pointer w-full font-bold"
             >
               {"<"}
@@ -109,7 +111,6 @@ function ContentSection({ selectedDate }) {
 export default ContentSection;
 
 // 데이터가 패칭되면 위아래로 회색 점선 렌더링 (절취선 느낌)
-
 
 // 데이터 패칭 형식
 /*

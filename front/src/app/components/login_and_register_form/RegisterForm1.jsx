@@ -1,195 +1,197 @@
 "use client";
 import React, { useState } from "react";
-import Link from 'next/link';
-import Image from 'next/image';
-import axios from 'axios'; // HTTP 요청을 위한 라이브러리 - 백엔드 API와 통신
-import { useRouter } from 'next/navigation'; // Next.js 라우팅을 위한 훅
+import Link from "next/link";
+import Image from "next/image";
+import axios from "axios"; // HTTP 요청을 위한 라이브러리 - 백엔드 API와 통신
+import { useRouter } from "next/navigation"; // Next.js 라우팅을 위한 훅
 
 function RegisterForm1() {
-    const router = useRouter(); // 페이지 이동을 위한 라우터 인스턴스
-    
-    // ===== 폼 입력 값 상태 관리 =====
-    const [selectedGender, setSelectedGender] = useState(null); // 선택된 성별 (male/female)
-    const [name, setName] = useState(""); // 사용자 이름
-    const [id, setId] = useState(""); // 사용자 아이디
-    const [password, setPassword] = useState(""); // 사용자 비밀번호
-    const [passwordCheck, setPasswordCheck] = useState(""); // 비밀번호 확인 입력값
-    
-    // ===== UI 상태 관리 =====
-    const [loading, setLoading] = useState(false); // API 요청 중 여부
+  const router = useRouter(); // 페이지 이동을 위한 라우터 인스턴스
 
-    // ===== 회원가입 처리 함수 =====
-    const handleRegister = async (e) => {
-        e.preventDefault(); // 기본 폼 제출 동작 방지
-        
-        // 필수 입력값 검증
-        if (!name || !selectedGender || !id || !password || !passwordCheck) {
-            alert("필수 항목을 입력해주세요.");
-            return;
-        }
+  // 폼 입력 값 상태 관리
+  const [selectedGender, setSelectedGender] = useState(null); // 선택된 성별 (male/female)
+  const [name, setName] = useState(""); // 사용자 이름
+  const [id, setId] = useState(""); // 사용자 아이디
+  const [password, setPassword] = useState(""); // 사용자 비밀번호
+  const [passwordCheck, setPasswordCheck] = useState(""); // 비밀번호 확인 입력값
 
-        // 비밀번호 일치 여부 검증
-        if (password !== passwordCheck) {
-            alert("비밀번호가 일치하지 않습니다.");
-            return;
-        }
+  // 회원가입 버튼 상태
+  const [loading, setLoading] = useState(false);
 
-        setLoading(true); // API 요청 시작 - 버튼 비활성화
+  // 회원가입 처리 함수
+  const handleRegister = async (e) => {
+    e.preventDefault(); // 기본 폼 제출 동작 방지
 
-        try {
-            // 백엔드 회원가입 API에 POST 요청 전송
-            const response = await axios.post(
-                'https://family-travel-photo-site.onrender.com/apis/signup', // 실제 배포된 서버
-                //'http://localhost:5000/apis/signup', // 로컬 서버
-                {
-                    name: name,
-                    gender: selectedGender,
-                    id: id,
-                    password: password,
-                    password_check: passwordCheck
-                }
-            );
+    // 필수 입력값 검증
+    if (!name || !selectedGender || !id || !password || !passwordCheck) {
+      alert("필수 항목을 입력해주세요.");
+      return;
+    }
 
-            // 회원가입 성공 시 처리
-            if (response.data.success) {
-                alert("회원가입이 완료되었습니다.");
-                router.push("/login"); // 로그인 페이지로 자동 이동
-            }
-        } catch (err) {
-            // 회원가입 실패 시 에러 메시지 표시
-            const errorMsg = err.response?.data?.message || "회원가입에 실패했습니다.";
-            alert(errorMsg);
-            console.log(errorMsg);
-        } finally {
-            setLoading(false); // API 요청 완료 - 회원가입 버튼 다시 활성화
-        }
-    };
+    // 비밀번호 일치 여부 검증
+    if (password !== passwordCheck) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
 
-    return (
-      <div className="h-screen w-full opacity-80 flex items-center justify-center">
-        <Image 
-          fill
-          style={{ objectFit: 'cover' }}
-          src="/images/login-bg.jpg"
-          alt="가족 여행 사진 배경"
-          className="-z-10"
-          />
-        <div className="p-8 mb-[5%] w-[75%] h-[80%] text-center">
-          {/* 회원가입 페이지 제목 */}
-          <h2 className="mt-[10%] font-bold text-lg lg:text-2xl">
-            <u>회원가입</u>
-          </h2>
-          
-          {/* 회원가입 폼 컨테이너 */}
-          <div className="mt-[7%] flex flex-col gap-4 items-center justify-center">
-            <form name="loginform" method="POST" onSubmit={handleRegister}> {/* 폼 제출 시 handleRegister 함수 실행 */}
-              
-              {/* ===== 이름 입력 필드 ===== */}
-              <input
-                name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="이름을 입력해 주세요."
-                className="w-[280px] h-[40px] my-[20px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
-              />
-              
-              {/* ===== 성별 선택 필드 ===== */}
-              <div className="my-[20px] flex flex-row items-center justify-center bg-[#FFF] border border-[#ccc] rounded-full outline-none box-border gap-2 overflow-hidden">
-                {/* 남성 선택 버튼 */}
-                <label
-                  htmlFor="male"
-                  className="w-[140px] h-[40px] flex items-center justify-center cursor-pointer rounded transition-all duration-300"
-                  style={{
-                    backgroundColor: selectedGender === "M" ? "#3b82f6" : "#f3f4f6",
-                    color: selectedGender === "M" ? "white" : "#374151",
-                    boxShadow: selectedGender === "M" ? "0 20px 25px -5px rgba(59, 130, 246, 0.3)" : "none"
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name="gender"
-                    id="male"
-                    value="M"
-                    className="hidden"
-                    onChange={() => setSelectedGender("M")}
-                    checked={selectedGender === "M"}
-                  />
-                  남성
-                </label>
-                
-                {/* 여성 선택 버튼 */}
-                <label
-                  htmlFor="female"
-                  className="w-[140px] h-[40px] flex items-center justify-center cursor-pointer rounded transition-all duration-300"
-                  style={{
-                    backgroundColor: selectedGender === "F" ? "#ec4899" : "#f3f4f6",
-                    color: selectedGender === "F" ? "white" : "#374151",
-                    boxShadow: selectedGender === "F" ? "0 20px 25px -5px rgba(236, 72, 153, 0.3)" : "none"
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name="gender"
-                    id="female"
-                    value="F"
-                    className="hidden"
-                    onChange={() => setSelectedGender("F")}
-                    checked={selectedGender === "F"}
-                  />
-                  여성
-                </label>
-              </div>
-              
-              {/* ===== 아이디 입력 필드 ===== */}
-              <input
-                type="text"
-                name="id"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                placeholder="사용하실 아이디를 입력해 주세요."
-                className="w-[280px] h-[40px] my-[20px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
-              />
-              
-              {/* ===== 비밀번호 입력 필드 ===== */}
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="사용하실 비밀번호를 입력해 주세요."
-                className="w-[280px] h-[40px] mb-2 lg:mb-[15px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
-              />
-              
-              {/* ===== 비밀번호 확인 입력 필드 ===== */}
-              <input
-                type="password"
-                name="passwordCheck"
-                value={passwordCheck}
-                onChange={(e) => setPasswordCheck(e.target.value)}
-                placeholder="비밀번호를 한 번 더 입력해 주세요."
-                className="w-[280px] h-[40px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
-              />
-              
-              {/* ===== 회원가입 제출 버튼 ===== */}
-              {/* loading 상태에 따라 버튼 텍스트 변경 및 비활성화 */}
-              <input
-                type="submit"
-                value={loading ? "처리 중..." : "회원가입"}
-                disabled={loading}
-                className="mb-[10px] mt-5 lg:mt-[30px] w-[280px] h-[45px] bg-[#ffe500] border-none rounded-[30px] text-[16px] font-bold text-black cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#ffdd00] disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-              
-              {/* ===== 로그인 페이지 링크 ===== */}
-              <div>
-                <Link href="/login" className="underline text-[#FFF] font-bold">
-                  로그인하기
-                </Link>
-              </div>
-            </form>
-          </div>
+    setLoading(true); // API 요청 시작 - 버튼 비활성화
+
+    try {
+      // 백엔드 회원가입 API에 POST 요청 전송
+      const response = await axios.post(
+        "https://family-travel-photo-site.onrender.com/apis/signup", // 실제 배포된 서버
+        //'http://localhost:5000/apis/signup', // 로컬 서버
+        {
+          name: name,
+          gender: selectedGender,
+          id: id,
+          password: password,
+          password_check: passwordCheck,
+        },
+      );
+
+      // 회원가입 성공 시 처리
+      if (response.data.success) {
+        alert("회원가입이 완료되었습니다.");
+        router.push("/login"); // 로그인 페이지로 자동 이동
+      }
+    } catch (error) {
+      // 회원가입 실패 시 에러 메시지 표시
+      console.error("회원가입 실패:", error.response.data.message);
+      alert(error.response.data.message);
+    } finally {
+      setLoading(false); // API 요청 완료 - 회원가입 버튼 다시 활성화
+    }
+  };
+
+  return (
+    <div className="h-screen w-full opacity-80 flex items-center justify-center">
+      <Image
+        fill
+        style={{ objectFit: "cover" }}
+        src="/images/login-bg.jpg"
+        alt="가족 여행 사진 배경"
+        className="-z-10"
+      />
+      <div className="p-8 mb-[5%] w-[75%] h-[80%] text-center">
+        {/* 회원가입 페이지 제목 */}
+        <h2 className="mt-[10%] font-bold text-lg lg:text-2xl">
+          <u>회원가입</u>
+        </h2>
+
+        {/* 회원가입 폼 컨테이너 */}
+        <div className="mt-[7%] flex flex-col gap-4 items-center justify-center">
+          <form name="loginform" method="POST" onSubmit={handleRegister}>
+            {" "}
+            {/* 폼 제출 시 handleRegister 함수 실행 */}
+            {/* 이름 입력 필드 */}
+            <input
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="이름을 입력해 주세요."
+              className="w-[280px] h-[40px] my-[20px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
+            />
+            {/* 성별 선택 필드 */}
+            <div className="my-[20px] flex flex-row items-center justify-center bg-[#FFF] border border-[#ccc] rounded-full outline-none box-border gap-2 overflow-hidden">
+              {/* 남성 선택 버튼 */}
+              <label
+                htmlFor="male"
+                className="w-[140px] h-[40px] flex items-center justify-center cursor-pointer rounded transition-all duration-300"
+                style={{
+                  backgroundColor:
+                    selectedGender === "M" ? "#3b82f6" : "#f3f4f6",
+                  color: selectedGender === "M" ? "white" : "#374151",
+                  boxShadow:
+                    selectedGender === "M"
+                      ? "0 20px 25px -5px rgba(59, 130, 246, 0.3)"
+                      : "none",
+                }}
+              >
+                <input
+                  type="radio"
+                  name="gender"
+                  id="male"
+                  value="M"
+                  className="hidden"
+                  onChange={() => setSelectedGender("M")}
+                  checked={selectedGender === "M"}
+                />
+                남성
+              </label>
+
+              {/* 여성 선택 버튼 */}
+              <label
+                htmlFor="female"
+                className="w-[140px] h-[40px] flex items-center justify-center cursor-pointer rounded transition-all duration-300"
+                style={{
+                  backgroundColor:
+                    selectedGender === "F" ? "#ec4899" : "#f3f4f6",
+                  color: selectedGender === "F" ? "white" : "#374151",
+                  boxShadow:
+                    selectedGender === "F"
+                      ? "0 20px 25px -5px rgba(236, 72, 153, 0.3)"
+                      : "none",
+                }}
+              >
+                <input
+                  type="radio"
+                  name="gender"
+                  id="female"
+                  value="F"
+                  className="hidden"
+                  onChange={() => setSelectedGender("F")}
+                  checked={selectedGender === "F"}
+                />
+                여성
+              </label>
+            </div>
+            {/* 아이디 입력 필드 */}
+            <input
+              type="text"
+              name="id"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              placeholder="사용하실 아이디를 입력해 주세요."
+              className="w-[280px] h-[40px] my-[20px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
+            />
+            {/* 비밀번호 입력 필드 */}
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="사용하실 비밀번호를 입력해 주세요."
+              className="w-[280px] h-[40px] mb-2 lg:mb-[15px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
+            />
+            {/* 비밀번호 확인 입력 필드 */}
+            <input
+              type="password"
+              name="passwordCheck"
+              value={passwordCheck}
+              onChange={(e) => setPasswordCheck(e.target.value)}
+              placeholder="비밀번호를 한 번 더 입력해 주세요."
+              className="w-[280px] h-[40px] px-[10px] text-[16px] text-[#333] bg-white border border-[#ccc] rounded outline-none box-border flex justify-center items-center"
+            />
+            {/* 회원가입 제출 버튼 */}
+            {/* loading 상태에 따라 버튼 텍스트 변경 및 비활성화 */}
+            <input
+              type="submit"
+              value={loading ? "처리 중..." : "회원가입"}
+              disabled={loading}
+              className="mb-[10px] mt-5 lg:mt-[30px] w-[280px] h-[45px] bg-[#ffe500] border-none rounded-[30px] text-[16px] font-bold text-black cursor-pointer transition-colors duration-300 ease-in-out hover:bg-[#ffdd00] disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            {/* 로그인 페이지 링크 */}
+            <div>
+              <Link href="/login" className="underline text-[#FFF] font-bold">
+                로그인하기
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
-    );
+    </div>
+  );
 }
 
 export default RegisterForm1;
