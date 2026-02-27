@@ -21,7 +21,7 @@ function RegisterForm1() {
   // 회원가입 처리 함수
   const handleRegister = async (e) => {
     e.preventDefault(); // 기본 폼 제출 동작 방지
-
+    
     // 필수 입력값 검증
     if (!name || !selectedGender || !id || !password || !passwordCheck) {
       alert("필수 항목을 입력해주세요.");

@@ -1,4 +1,4 @@
-"use client"; // Next.js에서 클라이언트 컴포넌트임을 명시
+~"use client"; // Next.js에서 클라이언트 컴포넌트임을 명시
 
 import { useEffect, useState} from "react";
 import PostModal from "../components/PostModal";
@@ -154,8 +154,10 @@ export default function Main() {
               placeCategory = place.category_name || '카테고리';
               placeAddress = place.address_name;
 
+              // 동적 콘텐츠 실제 생성 (검색 성공 시)
               const content = createContent(placeName, placePhone, placeCategory, placeAddress, '');
               updateOverlay(latlng, content);
+
             } else {
               // Places 검색 실패 시 Geocoder 사용
               geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) { 
@@ -168,6 +170,7 @@ export default function Main() {
                     placeAddress = result[0].address.address_name;
                   }
 
+                  // 동적 콘텐츠 실제 생성 (검색 실패 시)
                   const content = createContent(placeName, placePhone, placeCategory, placeAddress);
                   updateOverlay(latlng, content);
                 }

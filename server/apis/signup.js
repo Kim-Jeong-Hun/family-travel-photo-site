@@ -62,8 +62,6 @@ router.post('/', async (req, res) => {
   });
 }
 
-
-
     // 1, 2, 3 검증이 모두 끝난 경우 회원가입 로직 실행
     // 비밀번호 해싱
     const hashedPassword = await bcrypt.hash(password, 10); // salt 라운드: 10
