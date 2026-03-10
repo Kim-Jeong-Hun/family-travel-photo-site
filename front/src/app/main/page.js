@@ -1,4 +1,4 @@
-~"use client"; // Next.js에서 클라이언트 컴포넌트임을 명시
+"use client"; // Next.js에서 클라이언트 컴포넌트임을 명시
 
 import { useEffect, useState} from "react";
 import PostModal from "../components/PostModal";
