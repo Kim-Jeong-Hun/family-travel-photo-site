@@ -1,13 +1,26 @@
 "use client";
-import React, { useState } from "react";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 function LoginForm() {
   const [id, setId] = useState(""); // 사용자 아이디
   const [password, setPassword] = useState(""); // 사용자 비밀번호
   const [loading, setLoading] = useState(false); // API 요청 중 여부
+  
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if(token) {
+      // 이미 토큰이 있다면 바로 메인 페이지로 리다이렉트
+      router.push("/main");
+      // window.location.href = "/main"; // 페이지 강제로 처음부터 불러오기
+    }
+  }, [router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,21 +35,16 @@ function LoginForm() {
         },
       );
 
-      const { success, message, token } = response.data;
+      const { success, token } = response.data;
 
       if (success) {
         localStorage.setItem("accessToken", token); // 서버에서 받은 JWT 토큰을 로컬 스토리지에 저장
-        console.log(message); // 성공적으로 로그인되었습니다.
         alert("성공적으로 로그인되었습니다!");
-        window.location.href = "/main";
+        router.push("/main");
+        // window.location.href = "/main"; // 페이지 강제로 처음부터 불러오기
       }
     } catch (error) {
-      if (error) {
-        console.error("로그인 실패:", error.response.data.message);
-        alert(error.response.data.message);
-      } else {
-        alert("서버와 연결할 수 없습니다.");
-      }
+      alert(`로그인 실패: ${error.response.data.message}`);
     } finally {
       setLoading(false); // 성공 또는 실패 시 모두 로딩 종료
     }
