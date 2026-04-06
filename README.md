@@ -1,4 +1,10 @@
-# family-travel-photo-site
- 가족 여행 사진 공유 사이트
+# 가족 여행 사진첩 웹사이트
 
-웹페이지 디자인 : https://www.figma.com/design/r5fehSsPJO5JFhEZl2y0yG/family-travel-photo-site?node-id=0-1&p=f&t=mkhi4IYU2GFEIlxl-0
+
+여행을 자주 다니는 우리 가족이 실제로 사용할 수 있도록 하기 위해 만든 간단한 사진 저장용 웹사이트입니다.
+지도를 직접 클릭하여 위치를 선택하고, 간단한 글과 함께 최대 10장의 이미지를 저장할 수 있습니다.
+저장한 이미지와 글은 내 앨범 페이지에서 날짜별로 확인할 수 있습니다.
+반응형 웹 디자인이 적용되어 있어 PC, 모바일 화면에서 사용 가능합니다.
+
+
+웹사이트 주소 : https://family-travel-photo-site.vercel.app/
